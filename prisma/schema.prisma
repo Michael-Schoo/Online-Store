@@ -14,7 +14,7 @@ generator client {
 model User {
   id        Int         @id @default(autoincrement())
   email     String      @unique
-  name      String
+  username  String      @unique
   password  String // hashed
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
