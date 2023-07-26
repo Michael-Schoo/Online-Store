@@ -54,7 +54,7 @@ export const createPasswordHash = async (password: string) => {
     const hash = pbkdf2Sync(password, salt, 1000, 64, 'sha512')
         .toString('hex')
 
-        return `sha512:${salt}:${hash}`
+    return `sha512:${salt}:${hash}`
 };
 
 export const verifyPassword = (proposedPassword: string, passwordHash: string) => {
