@@ -12,16 +12,10 @@ export default function Login() {
     const [password, setPassword] = useState('')
     const [error, setError] = useState<boolean>(false)
 
-    const [active, setActive] = useState<boolean>(false)
-
     useEffect(() => setError(false), [email, password])
 
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect(() => { !active && login() }, [active])
-
-    const login = async (showError = false) => {
-        if ((!email || !password) && showError) return setError(true)
+    const login = async () => {
+        if (!email || !password) return setError(true)
 
         const response = await fetch("/api/login", {
             body: JSON.stringify({
@@ -38,17 +32,13 @@ export default function Login() {
         }
 
         else if (data.error) {
-            if (showError) {
-                setError(true)
-            } else {
-                setError(false)
-            }
+            setError(true)
         }
     }
 
     const handleAction = async (form: FormEvent<HTMLFormElement>) => {
         form.preventDefault()
-        await login(true)
+        await login()
         if (error) return alert("Please enter you email and password")
     }
 
@@ -69,8 +59,6 @@ export default function Login() {
 
                     <input type="email" className={`form-control ${error ? "is-invalid" : ""}`} id="email" required
                         onChange={e => setEmail(e.target.value)}
-                        onFocus={e => setActive(true)}
-                        onBlur={e => setActive(false)}
                     />
 
                     {error && (
@@ -91,8 +79,6 @@ export default function Login() {
 
                     <input type="password" className={`form-control ${error ? "is-invalid" : ''}`} id="password" required
                         onChange={e => setPassword(e.target.value)}
-                        onFocus={e => setActive(true)}
-                        onBlur={e => setActive(false)}
                     />
                     {error && (
                         <div className="invalid-feedback">
