@@ -130,7 +130,7 @@ export default function Register() {
                     <div className={`input-group ${(usernameError || usernameValid) ? "has-validation" : ''}`}>
                         <span className="input-group-text" id="@">@</span>
 
-                        <input type="text" className={`form-control ${usernameError ? "is-invalid" : usernameValid === true ? "is-valid" : ""}`} id="username" aria-describedby="@" required
+                        <input type="text" className={`form-control ${usernameError ? "is-invalid" : usernameValid === true ? "is-valid" : ""}`} id="displayname" autoComplete="off" aria-describedby="@" required
                             onChange={e => setUsername(e.target.value)}
                         />
 
