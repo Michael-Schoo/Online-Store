@@ -1,11 +1,19 @@
 import { cache } from "react"
 import prisma from "./prisma"
 import { cookies } from "next/headers"
+import { pbkdf2Sync } from "crypto"
+import { jwtVerify, SignJWT } from "jose"
+import { randomText } from "./tools"
 
-export const getUserByToken = cache((token: string) => {
+// get from env or make random str 
+const JWTToken = new TextEncoder().encode(process.env.JWT_TOKEN || randomText(16))
 
-    // TODO: use jwt
-    const userId = token
+export const getUserByToken = cache(async (token: string) => {
+
+    const jwt = await jwtVerify(token, JWTToken, { algorithms: ['HS256'] })
+    const userId = jwt.payload.sub
+
+    if (!userId) return null
 
     return prisma.user.findUnique({
         where: {
@@ -18,9 +26,43 @@ export const getUserByToken = cache((token: string) => {
     })
 })
 
+export const createUserToken = (user: { id: number }) => {
+    return new SignJWT({ 'hello': 'world' })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setNotBefore((Date.now() / 1000) - 60_000)
+        .setExpirationTime('7d')
+        .setSubject(user.id.toString())
+        .sign(JWTToken)
+}
 
-export const getCurrentUser = () => {
+
+export const getCurrentUser = async () => {
     const token = cookies().get("token")
     if (!token) return null
-    return getUserByToken(token.value)
+    try {
+        return await getUserByToken(token.value)
+    } catch (e) {
+        console.log(e)
+        return null
+    }
+}
+
+
+export const createPasswordHash = async (password: string) => {
+    const salt = randomText(16)
+    const hash = pbkdf2Sync(password, salt, 1000, 64, 'sha512')
+        .toString('hex')
+
+        return `sha512:${salt}:${hash}`
+};
+
+export const verifyPassword = (proposedPassword: string, passwordHash: string) => {
+    const [algorithm, salt, hash] = passwordHash.split(':')
+    if (!algorithm || !salt || !hash) return false
+
+    const proposedHash = pbkdf2Sync(proposedPassword, salt, 1000, 64, algorithm)
+        .toString('hex')
+
+    return proposedHash === hash
 }

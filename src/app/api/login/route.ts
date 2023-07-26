@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma"
+import { createUserToken, verifyPassword } from "@/lib/user"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
@@ -25,16 +26,16 @@ export async function POST(request: Request) {
             username: true,
         }
     })
-    if (!user || user.password !== password) {
+
+    if (!user || !verifyPassword(password, user.password)) {
         return NextResponse.json({
             error: "Invalid email or password"
         }, { status: 400 })
-
     }
 
     cookies().set({
         name: "token",
-        value: user.id.toString(),
+        value: await createUserToken(user),
         expires: new Date(Date.now() + expires),
         path: "/",
     })

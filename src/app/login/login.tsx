@@ -13,10 +13,10 @@ export default function Login() {
     const [error, setError] = useState<boolean>(false)
 
 
-    useEffect(() => void login(email, password), [email, password])
+    useEffect(() => void login(email, password, false), [email, password])
 
-    const login = async (email: string, password: string) => {
-        if (!email || !password) return setError(true)
+    const login = async (email: string, password: string, showError = true) => {
+        if ((!email || !password) && showError) return setError(true)
 
         const response = await fetch("/api/login", {
             body: JSON.stringify({
@@ -33,7 +33,11 @@ export default function Login() {
         }
 
         else if (data.error) {
-            setError(true)
+            if (showError) {
+                setError(true)
+            } else {
+                setError(false)
+            }
         }
     }
 
@@ -90,7 +94,7 @@ export default function Login() {
                 </div>
 
                 <br />
-                <button className="btn btn-lg btn-primary" type="submit">Sign up</button>
+                <button className="btn btn-lg btn-primary" type="submit">Sign in</button>
             </form>
         </main >
     )

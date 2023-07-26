@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma"
 import { emailRegex, passwordRegex, usernameRegex } from "@/lib/tools"
+import { createPasswordHash, createUserToken } from "@/lib/user"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
@@ -53,18 +54,17 @@ export async function POST(request: Request) {
         }, { status: 400 })
     }
 
-
     const user = await prisma.user.create({
         data: {
             email,
-            password,
+            password: await createPasswordHash(password),
             username,
         }
     })
 
     cookies().set({
         name: "token",
-        value: user.id.toString(),
+        value: await createUserToken(user),
         expires: new Date(Date.now() + expires),
         path: "/",
     })

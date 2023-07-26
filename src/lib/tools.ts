@@ -5,6 +5,8 @@ export const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
 // export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
 export const passwordRegex = /^.{8,}$/
 
+export const tokenLife = 1000 * 60 * 60 * 24 * 7 // 7 days
+
 
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -29,3 +31,5 @@ export function generateAvatarUrl(emailAddress: string, options: { defaultImage?
 
     return `https://www.gravatar.com/avatar/${emailHash}?d=${defaultImage}`;
 }
+
+export const randomText = (size = 16) => crypto.randomBytes(size).toString('hex');
