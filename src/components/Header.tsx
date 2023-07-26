@@ -3,22 +3,10 @@ import HeaderItem from "./HeaderItem"
 import HeaderUser from "./HeaderUser"
 import { cookies } from "next/headers"
 import Link from "next/link"
+import { getCurrentUser } from "@/lib/user"
 
 export default async function Header() {
-
-    const currentUserId = cookies().get("token")
-
-    const currentUser = currentUserId && await prisma.user.findUnique({
-        where: {
-            id: parseInt(currentUserId.value)
-        },
-        select: {
-            username: true,
-            email: true,
-        }
-    })
-
-    console.log({ currentUser, currentUserId })
+    const currentUser = await getCurrentUser()
 
     return (
         <header className="p-3 text-bg-dark">
@@ -36,7 +24,7 @@ export default async function Header() {
                         <HeaderUser user={currentUser} />
                     ) : (
                         <div className="text-end">
-                            <a type="button" className="btn btn-outline-light me-2" href="/login">Login</a>
+                            <Link type="button" className="btn btn-outline-light me-2" href="/login">Login</Link>
                             <Link type="button" className="btn btn-warning" href="/register">Sign-up</Link>
                         </div>
                     )}
