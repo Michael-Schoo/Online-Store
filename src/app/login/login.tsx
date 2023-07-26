@@ -20,8 +20,8 @@ export default function Login() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => { !active && login() }, [active])
 
-    const login = async () => {
-        if (!email || !password) return setError(true)
+    const login = async (showError = false) => {
+        if ((!email || !password) && showError) return setError(true)
 
         const response = await fetch("/api/login", {
             body: JSON.stringify({
@@ -38,13 +38,17 @@ export default function Login() {
         }
 
         else if (data.error) {
-            setError(true)
+            if (showError) {
+                setError(true)
+            } else {
+                setError(false)
+            }
         }
     }
 
     const handleAction = async (form: FormEvent<HTMLFormElement>) => {
         form.preventDefault()
-        await login()
+        await login(true)
         if (error) return alert("Please enter you email and password")
     }
 
