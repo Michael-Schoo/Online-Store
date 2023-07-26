@@ -28,7 +28,7 @@ export default function Register() {
             return setUsernameValid(false)
         }
 
-        const response = await fetch(`/register/check-username?${new URLSearchParams({ username })}`)
+        const response = await fetch(`/api/register/check-username?${new URLSearchParams({ username })}`)
 
         const data = await response.json()
         if (data.available) {
@@ -57,7 +57,7 @@ export default function Register() {
             return setEmailValid(false)
         }
 
-        const response = await fetch(`/register/check-email?${new URLSearchParams({ email })}`)
+        const response = await fetch(`/api/register/check-email?${new URLSearchParams({ email })}`)
 
         const data = await response.json()
         if (data.available) {
@@ -97,7 +97,7 @@ export default function Register() {
         if (hasErrors) return alert("Please fix the errors")
 
 
-        const response = await fetch("/register/attempt", {
+        const response = await fetch("/api/register", {
             body: JSON.stringify({
                 username,
                 email,
