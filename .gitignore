@@ -130,3 +130,5 @@ dist
 .pnp.*
 
 next-env.d.ts
+
+prisma/migrations
