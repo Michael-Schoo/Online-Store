@@ -23,7 +23,7 @@ export default function Register() {
 
 
     // verify that the username is valid (not taken)
-    const verifyUsername = async (username: string) => {
+    const verifyUsername = async (u?: string) => {
         setUsernameValid(null)
         setUsernameError(false)
         if (!username) return setUsernameValid(false)
@@ -39,7 +39,11 @@ export default function Register() {
 
         const data = await response.json()
         if (data.available) {
-            return setUsernameValid(true)
+            if (data.username == username) {
+                return setUsernameValid(true)
+            } else {
+                console.log("changed input")
+            }
         } else {
             setUsernameError("Username is already taken")
             return setUsernameValid(false)
@@ -50,7 +54,7 @@ export default function Register() {
     const [emailValid, setEmailValid] = useState<boolean | null | undefined>(undefined)
 
     // verify that the email is valid (not taken)
-    const verifyEmail = async (email: string) => {
+    const verifyEmail = async (e?: string) => {
 
         setEmailValid(null)
         setEmailError(false)
@@ -68,7 +72,9 @@ export default function Register() {
 
         const data = await response.json()
         if (data.available) {
-            return setEmailValid(true)
+            if (data.email == email) {
+                return setEmailValid(true)
+            }
         } else {
             setEmailError("Email is already taken")
             return setEmailValid(false)
@@ -78,7 +84,7 @@ export default function Register() {
     const [passwordError, setPasswordError] = useState<string | false>(false)
 
     // verify that the password is valid 
-    const verifyPassword = async (password: string) => {
+    const verifyPassword = async (p?: string) => {
         setPasswordError(false)
         if (!password) return
         // check password regex
@@ -127,8 +133,8 @@ export default function Register() {
 
     // TODO: https://getbootstrap.com/docs/5.3/forms/validation/#server-side
     return (
-        <form onSubmit={handleAction} className="grid min-h-[calc(100vh-4rem)] place-items-center">
-            <Card className="w-[30rem] m-10">
+        <form onSubmit={handleAction} className="grid sm:min-h-[calc(100vh-4rem)] place-items-center p-4 sm:p-0">
+            <Card className="w-full sm:w-[30rem] m-10">
                 <CardHeader className="space-y-1 text-center">
                     <CardTitle className="text-2xl">Create an account</CardTitle>
                     <CardDescription>

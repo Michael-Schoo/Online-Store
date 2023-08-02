@@ -23,7 +23,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
         available: !usernameUsed,
-        regexValid: usernameRegex.test(username)
+        regexValid: usernameRegex.test(username),
+        username
     }, { status: 200 });
 
 }

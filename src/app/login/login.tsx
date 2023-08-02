@@ -59,8 +59,8 @@ export default function Login() {
 
 
     return (
-        <form onSubmit={handleAction} className="grid min-h-[calc(100vh-4rem)] place-items-center">
-            <Card className="w-96 m-10">
+        <form onSubmit={handleAction} className="grid sm:min-h-[calc(100vh-4rem)] place-items-center p-4 sm:p-0">
+            <Card className="w-full sm:w-96 m-10">
                 <CardHeader className="space-y-1 text-center">
                     <CardTitle className="text-2xl">Login to your account</CardTitle>
                     <CardDescription>

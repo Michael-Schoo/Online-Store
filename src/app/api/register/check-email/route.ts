@@ -23,7 +23,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
         available: !emailUsed,
-        regexValid: emailRegex.test(email)
+        regexValid: emailRegex.test(email),
+        email
     }, { status: 200 });
 
 }

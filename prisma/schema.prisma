@@ -12,28 +12,62 @@ generator client {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  username  String    @unique
-  password  String // hashed
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  listings  Listing[]
-  admin     Boolean   @default(false)
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
+  username       String          @unique
+  password       String // hashed
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  admin          Boolean         @default(false)
+  listings       Listing[]
+  purchaces      Purchace[]
+  listingReviews ListingReview[]
+  notifications  Notification[]
 }
 
 model Listing {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String
-  price       Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
-  tags        Tag[]
+  id            Int             @id @default(autoincrement())
+  name          String
+  description   String
+  price         Float
+  archived      Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  userId        Int
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags          Tag[]
+  purchaces     Purchace[]
+  reviews       ListingReview[]
+  averageRating Float?
 
-  @@index([userId], name: "userId")
+  @@index([userId])
+}
+
+model ListingReview {
+  id          Int     @id @default(autoincrement())
+  description String?
+  rating      Int     @db.UnsignedTinyInt
+  listingId   Int
+  userId      Int
+  listing     Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([listingId])
+  @@index([userId])
+}
+
+model Purchace {
+  id        Int      @id @default(autoincrement())
+  time      DateTime @default(now())
+  userId    Int
+  listingId Int?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listing   Listing? @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  title     String
+  price     Float
+
+  @@index([userId])
+  @@index([listingId])
 }
 
 model Tag {
@@ -42,4 +76,15 @@ model Tag {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   items     Listing[]
+}
+
+model Notification {
+  id      Int     @id @default(autoincrement())
+  userId  Int
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message String
+  read    Boolean @default(false)
+  url     String?
+
+  @@index([userId])
 }
