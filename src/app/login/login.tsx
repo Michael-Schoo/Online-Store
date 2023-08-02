@@ -11,15 +11,13 @@ import { Loader2 } from "lucide-react"
 
 export default function Login() {
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
     const [error, setError] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
 
-    useEffect(() => setError(false), [email, password])
 
-    const login = async () => {
+    const login = async (email: string, password: string) => {
         setLoading(true)
+        
         if (!email || !password) {
             await wait(500);
             setError(true)
@@ -50,8 +48,9 @@ export default function Login() {
 
     const handleAction = async (form: FormEvent<HTMLFormElement>) => {
         form.preventDefault()
-        await login()
-        if (error) return alert("Please enter you email and password")
+        const email = (form.target as any).email.value as string
+        const password = (form.target as any).password.value as string
+        await login(email, password)
     }
 
 
@@ -70,7 +69,7 @@ export default function Login() {
                         <Label htmlFor="email">Email</Label>
                         <Input id="email" type="email" placeholder="me@example.com"
                             className={error ? "invalid-input" : ""}
-                            onChange={e => setEmail(e.target.value)}
+                            onChange={e => setError(false)}
                         />
                     </div>
 
@@ -78,7 +77,7 @@ export default function Login() {
                         <Label htmlFor="password">Password</Label>
                         <Input id="password" type="password" placeholder="********"
                             className={error ? "invalid-input" : ""}
-                            onChange={e => setPassword(e.target.value)}
+                            onChange={e => setError(false)}
                         />
                     </div>
 
