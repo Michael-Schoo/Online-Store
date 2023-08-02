@@ -1,0 +1,1 @@
+These files are templates from shadcn/ui

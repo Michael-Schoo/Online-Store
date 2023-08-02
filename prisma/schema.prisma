@@ -12,17 +12,17 @@ generator client {
 }
 
 model User {
-  id        Int         @id @default(autoincrement())
-  email     String      @unique
-  username  String      @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  username  String    @unique
   password  String // hashed
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  items     StoreItem[]
-  admin     Boolean     @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  listings  Listing[]
+  admin     Boolean   @default(false)
 }
 
-model StoreItem {
+model Listing {
   id          Int      @id @default(autoincrement())
   name        String
   description String
@@ -37,9 +37,9 @@ model StoreItem {
 }
 
 model Tag {
-  id        Int         @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  items     StoreItem[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  items     Listing[]
 }

@@ -8,7 +8,7 @@ export const passwordRegex = /^.{8,}$/
 export const tokenLife = 1000 * 60 * 60 * 24 * 7 // 7 days
 
 
-const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+export const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export async function minWait<T extends any>(ms: number, fn: () => Promise<T> | T) {
     const time = Date.now()

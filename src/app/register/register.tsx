@@ -1,9 +1,12 @@
 'use client'
 
-import { emailRegex, passwordRegex, usernameRegex } from "@/lib/tools"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { emailRegex, minWait, passwordRegex, usernameRegex } from "@/lib/tools"
 import { FormEvent, useEffect, useState } from "react"
-
-const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+import { Loader2 } from "lucide-react"
 
 
 export default function Register() {
@@ -14,6 +17,7 @@ export default function Register() {
 
     const [usernameError, setUsernameError] = useState<string | false>(false)
     const [usernameValid, setUsernameValid] = useState<boolean | null | undefined>(undefined)
+
 
     // verify that the username is valid (not taken)
     const verifyUsername = async (username: string) => {
@@ -87,6 +91,8 @@ export default function Register() {
     useEffect(() => void verifyEmail(email), [email])
     useEffect(() => void verifyPassword(password), [password])
 
+    const [loading, setLoading] = useState(false)
+
     const hasErrors = usernameError || emailError || passwordError
     const handleAction = async (form: FormEvent<HTMLFormElement>) => {
         form.preventDefault()
@@ -94,19 +100,20 @@ export default function Register() {
         if (!username) setUsernameError("You must enter a username")
         if (!email) setEmailError("You must enter an email")
         if (!password) setPasswordError("You must enter a password")
-        if (hasErrors) return alert("Please fix the errors")
+        // if (hasErrors) return alert("Please fix the errors")
+        setLoading(true)
 
-
-        const response = await fetch("/api/register", {
+        const response = await minWait(500, () => fetch("/api/register", {
             body: JSON.stringify({
                 username,
                 email,
                 password
             }),
             method: "POST"
-        });
+        }));
 
         const data = await response.json()
+        setLoading(false)
 
         if (data.success) {
             document.location.href = "/"
@@ -116,77 +123,49 @@ export default function Register() {
 
     // TODO: https://getbootstrap.com/docs/5.3/forms/validation/#server-side
     return (
-
-        // <main className="m-auto text-center" >
-        <main className="container pt-3 text-start">
-            <form onSubmit={handleAction} className="needs-validation">
-                <h1 className="h3 mb-3 fw-normal">Please register</h1>
-
-                <div className="col-md-4">
-                    {/* pattern="^[a-zA-Z0-9_]{3, 20}$" */}
-                    <label htmlFor="username" className="form-label">
-                        Username
-                    </label>
-                    <div className={`input-group ${(usernameError || usernameValid) ? "has-validation" : ''}`}>
-                        <span className="input-group-text" id="@">@</span>
-
-                        <input type="text" className={`form-control ${usernameError ? "is-invalid" : usernameValid === true ? "is-valid" : ""}`} id="displayname" autoComplete="off" aria-describedby="@" required
+        <form onSubmit={handleAction} className="grid min-h-[calc(100vh-64.8px)] place-items-center">
+            <Card className="w-[30rem] m-10">
+                <CardHeader className="space-y-1 text-center">
+                    <CardTitle className="text-2xl">Create an account</CardTitle>
+                    <CardDescription>
+                        Enter your email below to create your account
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-4">
+                    <div className="grid gap-2">
+                        <Label htmlFor="displayname">Username</Label>
+                        <Input id="displayname" type="displayname" placeholder="@username"
                             onChange={e => setUsername(e.target.value)}
+                            className={usernameError ? "invalid-input" : usernameValid ? "valid-input" : ""}
                         />
-
-                        {usernameError && (
-                            <div className="invalid-feedback">
-                                {usernameError}
-                            </div>
-                        )}
-
+                        {usernameError && <p className="text-destructive text-sm">{usernameError}</p>}
                     </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" type="email" placeholder="me@example.com"
+                            onChange={e => setEmail(e.target.value)}
+                            className={emailError ? "invalid-input" : emailValid ? "valid-input" : ""}
+                        />
+                        {emailError && <p className="text-destructive text-sm">{emailError}</p>}
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="password">Password</Label>
+                        <Input id="password" type="password"
+                            onChange={e => setPassword(e.target.value)}
+                            className={passwordError ? "invalid-input" : ""}
+                        />
+                        {passwordError && <p className="text-destructive text-sm">{passwordError}</p>}
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <Button className="w-full" role="submit" disabled={loading}>
+                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        Create account
+                    </Button>
+                </CardFooter>
+            </Card>
+        </form>
 
-                </div>
-                <br />
-
-
-                {/* email */}
-                <div className="col-md-4">
-                    <label htmlFor="email">
-                        Email address
-                    </label>
-
-                    <input type="email" className={`form-control ${emailError ? "is-invalid" : emailValid === true ? "is-valid" : ""}`} id="email" required
-                        onChange={e => setEmail(e.target.value)}
-                    />
-
-                    {emailError && (
-                        <div className="invalid-feedback">
-                            {emailError}
-                        </div>
-                    )}
-
-                </div>
-                <br />
-
-                {/* password */}
-                <div className="col-md-4">
-                    <label htmlFor="password">
-                        Password
-                    </label>
-
-                    <input type="password" className={`form-control ${passwordError ? "is-invalid" : password ? "is-valid" : ''}`} id="password" required
-                        onChange={e => setPassword(e.target.value)}
-                    />
-
-                    {passwordError && (
-                        <div className="invalid-feedback">
-                            {passwordError}
-                        </div>
-                    )}
-
-                </div>
-
-                <br />
-                <button className="btn btn-lg btn-primary" type="submit">Sign up</button>
-            </form>
-        </main >
     )
 }
 
