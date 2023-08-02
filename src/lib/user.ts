@@ -8,22 +8,14 @@ import { randomText } from "./tools"
 // get from env or make random str 
 const JWTToken = new TextEncoder().encode(process.env.JWT_TOKEN || randomText(16))
 
-export const getUserByToken = cache(async (token: string) => {
+export const getUserByToken = cache(async (token: string): Promise<string | null> => {
 
     const jwt = await jwtVerify(token, JWTToken, { algorithms: ['HS256'] })
     const userId = jwt.payload.sub
 
     if (!userId) return null
 
-    return prisma.user.findUnique({
-        where: {
-            id: parseInt(userId)
-        },
-        // select: {
-        //     username: true,
-        //     email: true,
-        // }
-    })
+    return userId
 })
 
 export const createUserToken = (user: { id: number }) => {
@@ -41,7 +33,16 @@ export const getCurrentUser = async () => {
     const token = cookies().get("token")
     if (!token) return null
     try {
-        return await getUserByToken(token.value)
+        const userId = await getUserByToken(token.value)
+        return userId && await prisma.user.findUnique({
+            where: {
+                id: parseInt(userId)
+            },
+            // select: {
+            //     username: true,
+            //     email: true,
+            // }
+        })
     } catch (e) {
         console.log(e)
         return null

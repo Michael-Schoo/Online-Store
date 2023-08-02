@@ -1,8 +1,8 @@
 import { Input } from "@/components/ui/input"
 
-export function Search() {
+export function Search({className}: {className?: string}) {
     return (
-        <div>
+        <div className={className}>
             <Input
                 type="search"
                 placeholder="Search..."

@@ -7,9 +7,12 @@ import { Label } from "@/components/ui/label"
 import { emailRegex, minWait, passwordRegex, usernameRegex } from "@/lib/tools"
 import { FormEvent, useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 
 export default function Register() {
+
+    const router = useRouter()
 
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
@@ -116,14 +119,15 @@ export default function Register() {
         setLoading(false)
 
         if (data.success) {
-            document.location.href = "/"
+            router.push("/")
+            router.refresh()
         }
     }
 
 
     // TODO: https://getbootstrap.com/docs/5.3/forms/validation/#server-side
     return (
-        <form onSubmit={handleAction} className="grid min-h-[calc(100vh-64.8px)] place-items-center">
+        <form onSubmit={handleAction} className="grid min-h-[calc(100vh-4rem)] place-items-center">
             <Card className="w-[30rem] m-10">
                 <CardHeader className="space-y-1 text-center">
                     <CardTitle className="text-2xl">Create an account</CardTitle>

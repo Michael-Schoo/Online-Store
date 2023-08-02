@@ -17,6 +17,7 @@ import {
 import { generateAvatarUrl } from "@/lib/tools"
 import Link from "next/link"
 
+
 interface UserProps {
     user: {
         username: string,
@@ -76,38 +77,47 @@ export function UserNav({ user }: UserProps) {
 
 export function SignedOutUserNav() {
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full p-2">
-                    <Avatar className="h-8 w-8">
-                        <AvatarFallback>?</AvatarFallback>
-                    </Avatar>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">Not signed in</p>
-                        <p className="text-xs leading-none text-muted-foreground">
-                            Sign in to access your purchases
-                        </p>
-                    </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                    <DropdownMenuItem asChild>
-                        <Link href="/login">
-                            Sign in
-                        </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="font-semibold" asChild>
-                        <Link href="/register">
-                            Sign up
-                        </Link>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
-            </DropdownMenuContent>
-        </DropdownMenu >
+        <>
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full p-2">
+                        <Avatar className="h-8 w-8">
+                            <AvatarFallback>?</AvatarFallback>
+                        </Avatar>
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                        <div className="flex flex-col space-y-1">
+                            <p className="text-sm font-medium leading-none">Not signed in</p>
+                            <p className="text-xs leading-none text-muted-foreground">
+                                Sign in to access your purchases
+                            </p>
+                        </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem asChild>
+                            <Link href="/login">
+                                Sign in
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="font-semibold" asChild>
+                            <Link href="/register">
+                                Sign up
+                            </Link>
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* <Button variant="secondary" asChild>
+                <Link href="/login">
+                    Login
+                </Link>
+            </Button> */}
+
+        </>
 
     )
 }
