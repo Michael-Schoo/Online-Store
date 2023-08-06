@@ -30,17 +30,28 @@ model Listing {
   name          String
   description   String
   price         Float
+  currency      String          @default("USD")
   archived      Boolean         @default(false)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   userId        Int
+  averageRating Float?
   user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   tags          Tag[]
   purchaces     Purchace[]
   reviews       ListingReview[]
-  averageRating Float?
+  images        ListingImage[]
 
   @@index([userId])
+}
+
+model ListingImage {
+  id        Int      @id @default(autoincrement())
+  url       String
+  Listing   Listing? @relation(fields: [listingId], references: [id])
+  listingId Int?
+
+  @@index([listingId])
 }
 
 model ListingReview {

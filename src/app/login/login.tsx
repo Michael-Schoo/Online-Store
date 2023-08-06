@@ -39,7 +39,9 @@ export default function Login() {
 
         if (data.success) {
             // document.location.href = "/"
-            router.push("/")
+            // get redirect param
+            const redirect = new URLSearchParams(document.location.search).get("redirect") || "/"
+            router.push(redirect)
             router.refresh()
         }
 
