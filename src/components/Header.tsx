@@ -9,11 +9,11 @@ export default async function Header() {
     return (
         <nav className="relative flex items-center justify-between border-b">
             <div className="flex w-full h-16 items-center px-4">
-                <MainNav className="w-full md:w-1/3" />
-                <div className="hidden justify-center md:flex md:w-1/3">
-                    <Search className="max-w-[450px] relative w-full lg:w-80 xl:w-full" />
+                <MainNav className="w-full md:w-auto lg:w-1/3" />
+                <div className="hidden lg:justify-center md:flex w-full lg:w-1/3 md:mx-10">
+                    <Search className="max-w-[350px] lg:max-w-[450px] relative w-full lg:w-80 xl:w-full" />
                 </div>
-                <div className="flex justify-end md:w-1/3">
+                <div className="flex justify-end lg:w-1/3">
                     {currentUser ? (
                         <UserNav user={currentUser} />
                     ) : (
