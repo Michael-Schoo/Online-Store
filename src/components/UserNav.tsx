@@ -58,7 +58,7 @@ export function UserNav({ user }: UserProps) {
                     <DropdownMenuItem>Profile</DropdownMenuItem>
                     <DropdownMenuItem>Purchases</DropdownMenuItem>
                     <DropdownMenuItem>Settings</DropdownMenuItem>
-                    <DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                         <Link href="/create-listing" className="cursor-pointer">New Listing</Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
