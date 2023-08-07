@@ -56,14 +56,14 @@ export default function ListingReview({ data: dataState, setTab }: { data: [Data
                         <CardContent className="grid gap-4 pt-3">
                             <div>
                                 <b className="font-bold pr-1">Name:</b>
-                                <span className={nameError ? "text-destructive" : ''}>
+                                <span className={nameError ? "text-red-500" : ''}>
                                     {data.name}
                                 </span>
                                 {nameError && <Error error={nameError} />}
                             </div>
                             <div>
                                 <b className="font-bold pr-1">Price:</b>
-                                <span className={priceError ? "text-destructive" : ''}>
+                                <span className={priceError ? "text-red-500" : ''}>
                                     {data.price} <span className="text-muted-foreground">({data.currency})</span>
                                 </span>
                                 {priceError && <Error error={priceError} />}
@@ -71,7 +71,7 @@ export default function ListingReview({ data: dataState, setTab }: { data: [Data
                             <div>
                                 <b className="font-bold">Description:</b>
                                 {descriptionError && <Error error={descriptionError} />}
-                                <ScrollArea className={cn("max-h-[200px] min-h-[50px] break-all rounded-md border p-2 pt-1", priceError && "text-destructive")}>
+                                <ScrollArea className={cn("max-h-[200px] min-h-[50px] break-all rounded-md border p-2 pt-1", descriptionError && "text-red-500")}>
                                     {data.description || <i className="italic text-muted-foreground select-none">None provided...</i>}
                                 </ScrollArea>
                             </div>

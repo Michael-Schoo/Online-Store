@@ -58,13 +58,15 @@ export function UserNav({ user }: UserProps) {
                     <DropdownMenuItem>Profile</DropdownMenuItem>
                     <DropdownMenuItem>Purchases</DropdownMenuItem>
                     <DropdownMenuItem>Settings</DropdownMenuItem>
-                    <DropdownMenuItem>New Listing</DropdownMenuItem>
+                    <DropdownMenuItem>
+                        <Link href="/create-listing" className="cursor-pointer">New Listing</Link>
+                    </DropdownMenuItem>
                 </DropdownMenuGroup>
 
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem asChild>
-                    <a href="/logout">
+                    <a href="/logout" className="cursor-pointer">
                         Log out
                         <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                     </a>
