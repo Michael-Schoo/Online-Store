@@ -7,23 +7,21 @@ export default async function Header() {
     const currentUser = await getCurrentUser()
 
     return (
-        <header className="flex-col flex">
-            <div className="border-b">
-                <div className="flex h-16 items-center px-4">
-                    <MainNav className="mx-6 hidden md:block" />
-                    <div className=" w-full hidden md:block align-middle text-centre">
-                        <Search className="ml-[25%]" />
-                    </div>
-                    <div className="ml-auto flex items-center space-x-4">
-                        {currentUser ? (
-                            <UserNav user={currentUser} />
-                        ) : (
-                            <SignedOutUserNav />
-                        )}
-                    </div>
+        <nav className="relative flex items-center justify-between border-b">
+            <div className="flex w-full h-16 items-center px-4">
+                <MainNav className="w-full md:w-1/3" />
+                <div className="hidden justify-center md:flex md:w-1/3">
+                    <Search className="max-w-[450px] relative w-full lg:w-80 xl:w-full" />
+                </div>
+                <div className="flex justify-end md:w-1/3">
+                    {currentUser ? (
+                        <UserNav user={currentUser} />
+                    ) : (
+                        <SignedOutUserNav />
+                    )}
                 </div>
             </div>
-        </header>
+        </nav>
 
     )
 

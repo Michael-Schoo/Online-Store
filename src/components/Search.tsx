@@ -5,8 +5,8 @@ export function Search({className}: {className?: string}) {
         <div className={className}>
             <Input
                 type="search"
-                placeholder="Search..."
-                className="md:w-[100px] lg:w-[300px]"
+                placeholder="Search for products..."
+                className="w-full"
             />
         </div>
     )

@@ -30,38 +30,42 @@ export function MainNav({
 
     return (
         <>
-            <Link className="hidden items-center space-x-2 md:flex pe-8" href="/">
-                <LogoIcon />
-                <span className="font-bold inline-block whitespace-nowrap">{siteName}</span>
-            </Link>
-
-            <button className="flex items-center space-x-2 md:hidden" onClick={() => setShowMobileMenu(!showMobileMenu)}>
-                {showMobileMenu ? <CloseIcon /> : <LogoIcon />}
-                <span className="font-bold inline-block">
-                    {showMobileMenu ? "Close Menu" : siteName}
-                </span>
-
-                <Arrow className={cn("transform transition-transform", showMobileMenu ? "-rotate-180" : "")} />
-
-            </button>
 
             <nav
                 className={cn("flex items-center space-x-4 lg:space-x-6", className)}
                 {...props}
             >
-                {items.map((item) => (
-                    // <HeaderLink key={item.url} url={item.url} text={item.text} />
-                    <Link key={item.url} href={item.url} className={cn(
-                        "text-sm font-medium transition-colors hover:text-primary",
-                        path !== item.url ? "text-muted-foreground" : ""
-                    )}>
-                        {item.text}
-                    </Link>
-                ))}
+                <Link className="hidden items-center space-x-2 md:flex pe-8" href="/">
+                    <LogoIcon />
+                    <span className="font-bold inline-block whitespace-nowrap">{siteName}</span>
+                </Link>
+
+                <button className="flex items-center space-x-2 md:hidden" onClick={() => setShowMobileMenu(!showMobileMenu)}>
+                    {showMobileMenu ? <CloseIcon /> : <LogoIcon />}
+                    <span className="font-bold inline-block">
+                        {showMobileMenu ? "Close Menu" : siteName}
+                    </span>
+
+                    <Arrow className={cn("transform transition-transform", showMobileMenu ? "-rotate-180" : "")} />
+
+                </button>
+                <div className="hidden gap-6 text-sm md:flex md:items-center">
+
+                    {items.map((item) => (
+                        // <HeaderLink key={item.url} url={item.url} text={item.text} />
+                        <Link key={item.url} href={item.url} className={cn(
+                            "text-sm font-medium transition-colors hover:text-primary",
+                            path !== item.url ? "text-muted-foreground" : ""
+                        )}>
+                            {item.text}
+                        </Link>
+                    ))}
+                </div>
+
             </nav>
             {showMobileMenu && (
                 <MobileHeader close={() => setShowMobileMenu(false)} />
-            )}  
+            )}
         </>
 
     )
@@ -77,7 +81,7 @@ function MobileHeader({ close }: { close: () => void }) {
                 "fixed inset-0 top-16 z-50 grid h-[calc(100vh-4rem)] grid-flow-row auto-rows-max overflow-auto p-6 pb-32 shadow-md animate-in slide-in-from-bottom-80 md:hidden"
             )}
         >
-            <div className="relative z-20 grid gap-6 rounded-md bg-popover p-4 text-popover-foreground shadow-md">
+            <div className="relative z-20 grid gap-6 rounded-md bg-popover p-4 text-popover-foreground shadow-md border">
                 <Link href="/" className="flex items-center space-x-2">
                     <LogoIcon />
                     <span className="font-bold whitespace-nowrap">{siteName}</span>

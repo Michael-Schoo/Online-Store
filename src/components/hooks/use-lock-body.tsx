@@ -7,6 +7,15 @@ export function useLockBody() {
             document.body
         ).overflow
         document.body.style.overflow = "hidden"
-        return () => (document.body.style.overflow = originalStyle)
+        
+        // blurring the background
+        const main = document.querySelector("body main") as HTMLElement
+        main.style.filter = "blur(1px)"
+        
+        return () => {
+            document.body.style.overflow = originalStyle
+            main.style.filter = "blur(0px)"
+        }
+
     }, [])
 }
