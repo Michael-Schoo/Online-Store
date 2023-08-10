@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ListingInfoBasic from "./basic-listing-config"
 import { useState } from "react"
 import ListingReview from "./review-listing"
+import UploadImages from "./upload-images"
 
 
 // Requirements
@@ -31,7 +32,7 @@ export default function CreateListing() {
         description: "",
         price: null,
         currency: "USD",
-        tags: [],
+        tags: ['Default tag :)'],
         images: [],
     })
 
@@ -52,7 +53,7 @@ export default function CreateListing() {
                     <ListingInfoBasic data={dataState} setTab={setTab} />
                 </TabsContent>
                 <TabsContent value="images">
-
+                    <UploadImages data={dataState} setTab={setTab} />
                 </TabsContent>
                 <TabsContent value="review">
                     <ListingReview data={dataState} setTab={setTab} />

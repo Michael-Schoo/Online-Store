@@ -1,6 +1,5 @@
 
 // import { register } from './actions'
-import { cookies } from 'next/headers'
 import Register from './register'
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '@/lib/user'

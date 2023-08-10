@@ -24,3 +24,18 @@ export const validatePrice = (price: number, currency: string, harsh = false) =>
     if (price > 10_000) return "Price must be less than $10,000"
     return null
 }
+
+
+export const validateImages = (images: string[]) => {
+    if (images.length > 10) return "Maximum of 10 images allowed"
+    return null
+}
+
+export const validateTags = (tags: string[]) => {
+    if (tags.length > 10) return "Maximum of 10 tags allowed"
+    // each tag must be between 1 and 20 characters
+    for (const tag of tags) {
+        if (tag.length < 1 || tag.length > 20) return "Tags must be between 1 and 10 characters"
+    }
+    return null
+}

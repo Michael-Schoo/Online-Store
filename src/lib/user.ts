@@ -28,13 +28,22 @@ export const createUserToken = (user: { id: number }) => {
         .sign(JWTToken)
 }
 
-
-export const getCurrentUser = async () => {
+export const getCurrentUserId = cache(async () => {
     const token = cookies().get("token")
     if (!token) return null
     try {
-        const userId = await getUserByToken(token.value)
-        return userId && await prisma.user.findUnique({
+        return await getUserByToken(token.value)
+    } catch (e) {
+        console.log(e)
+        return null
+    }
+})
+
+export const getCurrentUser = cache(async () => {
+    const userId = await getCurrentUserId()
+    if (!userId) return null
+    try {
+        return await prisma.user.findUnique({
             where: {
                 id: parseInt(userId)
             },
@@ -47,7 +56,7 @@ export const getCurrentUser = async () => {
         console.log(e)
         return null
     }
-}
+})
 
 
 export const createPasswordHash = async (password: string) => {

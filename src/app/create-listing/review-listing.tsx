@@ -4,10 +4,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Dispatch, FormEvent, SetStateAction } from "react"
 import { Button } from "@/components/ui/button"
 import { Data } from "./create-listing"
-import { validateDescription, validateName, validatePrice } from "./validators"
+import { validateDescription, validateImages, validateName, validatePrice } from "./validators"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 
 // Requirements
@@ -27,13 +28,31 @@ export default function ListingReview({ data: dataState, setTab }: { data: [Data
     const nameError = validateName(data.name, true)
     const descriptionError = validateDescription(data.description, true)
     const priceError = validatePrice(data.price || 0, data.currency, true)
+    const imagesError = validateImages(data.images)
 
-    const hasErrors = nameError || descriptionError || priceError
+    const hasErrors = nameError || descriptionError || priceError || imagesError
 
+    const router = useRouter()
 
-    const submit = (form: FormEvent<HTMLFormElement>) => {
+    const submit = async (form: FormEvent<HTMLFormElement>) => {
         form.preventDefault()
-        alert("YAY")
+
+        const res = await fetch("/api/listing", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+
+        const json = await res.json()
+        if (res.ok && json.id) {
+            setTab("success")
+            router.push(`/listing/${json.id}`)
+        } else {
+            alert("Something went wrong")
+            console.log(json)
+        }
 
     }
 
@@ -75,24 +94,38 @@ export default function ListingReview({ data: dataState, setTab }: { data: [Data
                                     {data.description || <i className="italic text-muted-foreground select-none">None provided...</i>}
                                 </ScrollArea>
                             </div>
+                            <div>
+
+                                {/* grid of images */}
+                                <b className="font-bold">Images:</b>
+                                {imagesError && <Error error={imagesError} />}
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                    {data.images.map((img, i) => (
+                                        <Card key={i} className="w-full">
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                                            <img src={`https://utfs.io/f/${img}`} alt="listing image" className="w-full h-full object-cover rounded-md" />
+                                        </Card>
+                                    ))}
+                                </div>
+                                {data.images.length === 0 && <i className="italic text-muted-foreground select-none">None provided...</i>}
+                            </div>
 
                         </CardContent>
 
                     </Card>
 
 
+
                 </CardContent>
 
                 <CardFooter className="flex sm:flex-row sm:justify-end sm:space-x-2 md:w-full whitespace-nowrap">
-                    <Button className="" variant="secondary" onClick={() => setTab("images")}>
+                    <Button variant="secondary" onClick={() => setTab("images")}>
                         {"<"} Images
                     </Button>
                     <div className="sm:w-full m-2" />
-                    {/* <div className="w-full"> */}
                     <Button className="w-full sm:w-auto min-w-[100px]" role="submit" disabled={!!hasErrors}>
                         Submit
                     </Button>
-                    {/* </div> */}
                 </CardFooter>
             </Card>
 

@@ -23,6 +23,7 @@ model User {
   purchaces      Purchace[]
   listingReviews ListingReview[]
   notifications  Notification[]
+  listingImages  ListingImage[]
 }
 
 model Listing {
@@ -30,10 +31,14 @@ model Listing {
   name          String
   description   String
   price         Float
-  currency      String          @default("USD")
+  currency      String          @default("USD") @db.VarChar(3)
   archived      Boolean         @default(false)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+  publishedAt   DateTime?
+  published     Boolean         @default(false)
+  // if there is a purchace or bid, it is locked for edits
+  locked        Boolean         @default(false)
   userId        Int
   averageRating Float?
   user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -47,11 +52,16 @@ model Listing {
 
 model ListingImage {
   id        Int      @id @default(autoincrement())
-  url       String
-  Listing   Listing? @relation(fields: [listingId], references: [id])
+  customAWS String?
+  awsKey    String
+  customURL String?
+  listing   Listing? @relation(fields: [listingId], references: [id])
   listingId Int?
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([listingId])
+  @@index([userId])
 }
 
 model ListingReview {
@@ -82,20 +92,21 @@ model Purchace {
 }
 
 model Tag {
-  id        Int       @id @default(autoincrement())
-  name      String
+  // id        Int       @id @default(autoincrement())
+  name      String    @id @db.VarChar(20)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   items     Listing[]
 }
 
 model Notification {
-  id      Int     @id @default(autoincrement())
-  userId  Int
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  message String
-  read    Boolean @default(false)
-  url     String?
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message   String
+  read      Boolean  @default(false)
+  url       String?
+  createdAt DateTime @default(now())
 
   @@index([userId])
 }
