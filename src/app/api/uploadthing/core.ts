@@ -15,8 +15,9 @@ export const ourFileRouter = {
             // If you throw, the user will not be able to upload
             if (!user) throw new Error("Unauthorized");
 
+
             // Whatever is returned here is accessible in onUploadComplete as `metadata`
-            return { userId: user.id, type: "listingImage" };
+            return { userId: user.id };
         })
         .onUploadComplete(async ({ metadata, file }) => {
             // This code RUNS ON YOUR SERVER after upload

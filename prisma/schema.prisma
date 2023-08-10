@@ -53,7 +53,7 @@ model Listing {
 model ListingImage {
   id        Int      @id @default(autoincrement())
   customAWS String?
-  awsKey    String
+  awsKey    String?
   customURL String?
   listing   Listing? @relation(fields: [listingId], references: [id])
   listingId Int?

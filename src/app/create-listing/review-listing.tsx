@@ -22,7 +22,6 @@ import { useRouter } from "next/navigation"
 
 export default function ListingReview({ data: dataState, setTab }: { data: [Data, Dispatch<SetStateAction<Data>>], setTab: Dispatch<SetStateAction<string>> }) {
     const [data, setData] = dataState
-    // console.log(data)
 
 
     const nameError = validateName(data.name, true)
@@ -36,6 +35,7 @@ export default function ListingReview({ data: dataState, setTab }: { data: [Data
 
     const submit = async (form: FormEvent<HTMLFormElement>) => {
         form.preventDefault()
+        setTab("review")
 
         const res = await fetch("/api/listing", {
             method: "POST",

@@ -48,7 +48,23 @@ export default async function ListingPage({ params: { id } }: { params: { id: st
     const images = listing.images.map(getListingImage)
 
     return (
-        JSON.stringify({ ...listing, images }, null, 2)
+        <>
+            <div>
+                <h1>{listing.name}</h1>
+                <p>{listing.description}</p>
+                <p>${listing.price} ({listing.currency})</p>
+                <p>{listing.tags.map(tag => tag.name).join(", ")}</p>
+                <p>{listing.publishedAt?.toISOString()}</p>
+                <p>{listing.published ? "Published" : "Draft"}</p>
+                <p>@{listing.user.username}{isCreator && " (You!)"}</p>
+                <div>
+                    {images.map((img, i) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img key={i} src={img} alt="" crossOrigin="anonymous" />
+                    ))}
+                </div>
+            </div>
+        </>
     )
 }
 

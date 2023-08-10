@@ -42,7 +42,7 @@ export function generateAvatarUrl(emailAddress: string, options: { defaultImage?
 export const randomText = (size = 16) => crypto.randomBytes(size).toString('hex');
 
 
-export const getListingImage = ({awsKey: s3Key, customAWS, customURL}: {awsKey: string, customAWS?: string | null, customURL?: string | null}) => {
+export const getListingImage = ({ awsKey: s3Key, customAWS, customURL }: { awsKey?: string | null, customAWS?: string | null, customURL?: string | null }) => {
     if (customAWS) {
         if (!customAWSRegex.test(customAWS)) {
             // TODO: better error
@@ -51,8 +51,10 @@ export const getListingImage = ({awsKey: s3Key, customAWS, customURL}: {awsKey: 
         return `https://${customAWS}.amazonaws.com/${s3Key}`
     } else if (customURL) {
         return `${customURL}/${s3Key}`
-    } else {
+    } else if (s3Key) {
         // return `https://uploadthing-prod.s3.us-west-1.amazonaws.com/${s3Key}`
         return `https://utfs.io/f/${s3Key}`
+    } else {
+        return ""
     }
 }
