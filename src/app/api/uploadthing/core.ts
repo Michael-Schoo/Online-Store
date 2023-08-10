@@ -1,3 +1,4 @@
+import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/user";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 
@@ -24,6 +25,14 @@ export const ourFileRouter = {
             console.log("Upload complete for userId:", metadata.userId);
 
             console.log("file url", file.url);
+
+            await prisma.unusedUploadedFile.create({
+                data: {
+                    key: file.key,
+                    userId: metadata.userId,
+                }
+            })
+
         }),
 } satisfies FileRouter;
 

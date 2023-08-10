@@ -12,18 +12,19 @@ generator client {
 }
 
 model User {
-  id             Int             @id @default(autoincrement())
-  email          String          @unique
-  username       String          @unique
-  password       String // hashed
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  admin          Boolean         @default(false)
-  listings       Listing[]
-  purchaces      Purchace[]
-  listingReviews ListingReview[]
-  notifications  Notification[]
-  listingImages  ListingImage[]
+  id                  Int                  @id @default(autoincrement())
+  email               String               @unique
+  username            String               @unique
+  password            String // hashed
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  admin               Boolean              @default(false)
+  listings            Listing[]
+  purchaces           Purchace[]
+  listingReviews      ListingReview[]
+  notifications       Notification[]
+  listingImages       ListingImage[]
+  unusedUploadedFiles UnusedUploadedFile[]
 }
 
 model Listing {
@@ -107,6 +108,15 @@ model Notification {
   read      Boolean  @default(false)
   url       String?
   createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model UnusedUploadedFile {
+  key        String   @id
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  uploadedAt DateTime @default(now())
 
   @@index([userId])
 }

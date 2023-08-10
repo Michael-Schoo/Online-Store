@@ -44,6 +44,8 @@ export async function POST(request: Request) {
         }, { status: 400 })
     }
 
+    
+    // create the listing
     const listing = await prisma.listing.create({
         data: {
             name,
@@ -77,6 +79,20 @@ export async function POST(request: Request) {
             id: true
         }
     })
+    
+    // remove the images from "unused" table
+    if (images?.length && !customAWS) {
+        console.log(images)
+        await prisma.unusedUploadedFile.deleteMany({
+            where: {
+                key: {
+                    in: images,
+                },
+                userId: user.id
+            }
+        })
+    }
+
 
     return NextResponse.json({
         id: listing.id
