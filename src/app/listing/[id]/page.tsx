@@ -17,6 +17,21 @@ export default async function ListingPage({ params: { id } }: { params: { id: st
             currency: true,
             publishedAt: true,
             published: true,
+            averageRating: true,
+            reviews: {
+                select: {
+                    id: true,
+                    rating: true,
+                    comment: true,
+                    createdAt: true,
+                    user: {
+                        select: {
+                            username: true,
+                            id: true,
+                        }
+                    }
+                }
+            },
             tags: {
                 select: {
                     name: true,
@@ -39,7 +54,8 @@ export default async function ListingPage({ params: { id } }: { params: { id: st
     })
 
     if (!listing) return notFound();
-    const isCreator = (await getCurrentUserId()) === listing.user.id.toString()
+    const currentUser = await getCurrentUserId()
+    const isCreator = currentUser === listing.user.id.toString()
     // if (!listing.published && !isCreator) {
     //     return "DRAFT... check later :)"
     //     // return notFound()
@@ -48,23 +64,32 @@ export default async function ListingPage({ params: { id } }: { params: { id: st
     const images = listing.images.map(getListingImage)
 
     return (
-        <>
+        <div>
+            <h1>{listing.name}</h1>
+            <p>{listing.description}</p>
+            <p>${listing.price} ({listing.currency})</p>
+            <p>{listing.tags.map(tag => tag.name).join(", ")}</p>
+            <p>{listing.publishedAt?.toISOString()}</p>
+            <p>{listing.published ? "Published" : "Draft"}</p>
+            <p>@{listing.user.username}{isCreator && " (You!)"}</p>
             <div>
-                <h1>{listing.name}</h1>
-                <p>{listing.description}</p>
-                <p>${listing.price} ({listing.currency})</p>
-                <p>{listing.tags.map(tag => tag.name).join(", ")}</p>
-                <p>{listing.publishedAt?.toISOString()}</p>
-                <p>{listing.published ? "Published" : "Draft"}</p>
-                <p>@{listing.user.username}{isCreator && " (You!)"}</p>
-                <div>
-                    {images.map((img, i) => (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img key={i} src={img} alt="" crossOrigin="anonymous" />
-                    ))}
-                </div>
+                {images.map((img, i) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img key={i} src={img} alt="" crossOrigin="anonymous" />
+                ))}
             </div>
-        </>
+            <div>
+                <ul>
+                    {listing.reviews.map(review => (
+                        <li key={review.id}>
+                            <p>{review.rating}/5 ({review.createdAt.toISOString()})</p>
+                            <p>@{review.user.username}</p>
+                            <p>{review.comment}</p>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
     )
 }
 

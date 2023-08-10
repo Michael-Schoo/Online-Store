@@ -96,8 +96,11 @@ export default function Register() {
         }
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => void verifyUsername(username), [username])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => void verifyEmail(email), [email])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => void verifyPassword(password), [password])
 
     const [loading, setLoading] = useState(false)

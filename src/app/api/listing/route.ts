@@ -82,13 +82,15 @@ export async function POST(request: Request) {
     
     // remove the images from "unused" table
     if (images?.length && !customAWS) {
-        console.log(images)
-        await prisma.unusedUploadedFile.deleteMany({
+        await prisma.uploadedFile.updateMany({
             where: {
                 key: {
                     in: images,
                 },
                 userId: user.id
+            },
+            data: {
+                used: true
             }
         })
     }

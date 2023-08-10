@@ -24,7 +24,7 @@ model User {
   listingReviews      ListingReview[]
   notifications       Notification[]
   listingImages       ListingImage[]
-  unusedUploadedFiles UnusedUploadedFile[]
+  unusedUploadedFiles UploadedFile[]
 }
 
 model Listing {
@@ -66,13 +66,15 @@ model ListingImage {
 }
 
 model ListingReview {
-  id          Int     @id @default(autoincrement())
-  description String?
-  rating      Int     @db.UnsignedTinyInt
-  listingId   Int
-  userId      Int
-  listing     Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement())
+  comment   String?
+  rating    Int      @db.UnsignedTinyInt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  listingId Int
+  userId    Int
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([listingId])
   @@index([userId])
@@ -112,11 +114,12 @@ model Notification {
   @@index([userId])
 }
 
-model UnusedUploadedFile {
+model UploadedFile {
   key        String   @id
   userId     Int
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   uploadedAt DateTime @default(now())
+  used       Boolean  @default(false)
 
   @@index([userId])
 }

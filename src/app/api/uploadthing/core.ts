@@ -26,7 +26,7 @@ export const ourFileRouter = {
 
             console.log("file url", file.url);
 
-            await prisma.unusedUploadedFile.create({
+            await prisma.uploadedFile.create({
                 data: {
                     key: file.key,
                     userId: metadata.userId,

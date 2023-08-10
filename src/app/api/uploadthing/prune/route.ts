@@ -9,11 +9,12 @@ export const revalidate = 0
 export async function GET(request: Request) {
 
     const maxAge = new Date(Date.now() - 1000 * 60 * 60 * 24 * 3) // 3 days
-    const files = await prisma.unusedUploadedFile.findMany({
+    const files = await prisma.uploadedFile.findMany({
         where: {
             uploadedAt: {
                 lt: maxAge
-            }
+            },
+            used: false
         }
     })
 
@@ -28,11 +29,12 @@ export async function GET(request: Request) {
     await utapi.deleteFiles(files.map(i => i.key))
 
     // delete the database entries
-    await prisma.unusedUploadedFile.deleteMany({
+    await prisma.uploadedFile.deleteMany({
         where: {
             uploadedAt: {
                 lt: maxAge
             },
+            used: false
         }
     })
 
