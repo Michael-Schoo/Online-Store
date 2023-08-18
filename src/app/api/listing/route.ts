@@ -1,9 +1,14 @@
-import { validateDescription, validateImages, validateName, validatePrice, validateTags } from "@/app/create-listing/validators"
+import {
+    validateDescription,
+    validateImages,
+    validateName,
+    validatePrice,
+    validateTags,
+} from "@/app/create-listing/validators"
 import prisma from "@/lib/prisma"
 import { customAWSRegex } from "@/lib/tools"
 import { getCurrentUser } from "@/lib/user"
 import { NextResponse } from "next/server"
-
 
 export async function POST(request: Request) {
     const res = await request.json()
@@ -23,7 +28,10 @@ export async function POST(request: Request) {
     const tags = res.tags as string[] | undefined
 
     if (!name || !price || !currency) {
-        return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+        return NextResponse.json(
+            { error: "Missing required fields" },
+            { status: 400 },
+        )
     }
 
     const nameError = validateName(name, true)
@@ -34,17 +42,19 @@ export async function POST(request: Request) {
     const customAWSError = customAWS ? customAWSRegex.test(customAWS) : null
 
     if (nameError || descriptionError || priceError || imagesError || customAWSError) {
-        return NextResponse.json({
-            name: nameError || undefined,
-            description: descriptionError || undefined,
-            price: priceError || undefined,
-            images: imagesError || undefined,
-            customAWS: customAWSError ? "invalid aws subdomain" : undefined,
-            tags: tagsError || undefined
-        }, { status: 400 })
+        return NextResponse.json(
+            {
+                name: nameError || undefined,
+                description: descriptionError || undefined,
+                price: priceError || undefined,
+                images: imagesError || undefined,
+                customAWS: customAWSError ? "invalid aws subdomain" : undefined,
+                tags: tagsError || undefined,
+            },
+            { status: 400 },
+        )
     }
 
-    
     // create the listing
     const listing = await prisma.listing.create({
         data: {
@@ -56,30 +66,32 @@ export async function POST(request: Request) {
             published: false,
             publishedAt: null,
             images: {
-                create: images?.map(image => ({
+                create: images?.map((image) => ({
                     awsKey: image,
                     customAWS,
-                    userId: user.id
-                }))
+                    userId: user.id,
+                })),
             },
             userId: user.id,
-            tags: tags ? {
-                connectOrCreate: tags.map(tag => ({
-                    where: {
-                        name: tag,
-                    },
-                    // TODO: possibly not allow creating tags
-                    create: {
-                        name: tag
-                    }
-                }))
-            } : undefined
+            tags: tags
+                ? {
+                    connectOrCreate: tags.map((tag) => ({
+                        where: {
+                            name: tag,
+                        },
+                        // TODO: possibly not allow creating tags
+                        create: {
+                            name: tag,
+                        },
+                    })),
+                }
+                : undefined,
         },
         select: {
-            id: true
-        }
+            id: true,
+        },
     })
-    
+
     // remove the images from "unused" table
     if (images?.length && !customAWS) {
         await prisma.uploadedFile.updateMany({
@@ -87,17 +99,18 @@ export async function POST(request: Request) {
                 key: {
                     in: images,
                 },
-                userId: user.id
+                userId: user.id,
             },
             data: {
-                used: true
-            }
+                used: true,
+            },
         })
     }
 
-
-    return NextResponse.json({
-        id: listing.id
-    }, { status: 200 })
-
+    return NextResponse.json(
+        {
+            id: listing.id,
+        },
+        { status: 200 },
+    )
 }

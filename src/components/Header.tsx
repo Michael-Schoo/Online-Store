@@ -8,10 +8,10 @@ export default async function Header() {
 
     return (
         <nav className="relative flex items-center justify-between border-b">
-            <div className="flex w-full h-16 items-center px-4">
+            <div className="flex h-16 w-full items-center px-4">
                 <MainNav className="w-full md:w-auto lg:w-1/3" />
-                <div className="hidden lg:justify-center md:flex w-full lg:w-1/3 md:mx-10">
-                    <Search className="max-w-[350px] lg:max-w-[450px] relative w-full lg:w-80 xl:w-full" />
+                <div className="hidden w-full md:mx-10 md:flex lg:w-1/3 lg:justify-center">
+                    <Search className="relative w-full max-w-[350px] lg:w-80 lg:max-w-[450px] xl:w-full" />
                 </div>
                 <div className="flex justify-end lg:w-1/3">
                     {currentUser ? (
@@ -22,7 +22,5 @@ export default async function Header() {
                 </div>
             </div>
         </nav>
-
     )
-
 }

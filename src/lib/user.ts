@@ -5,25 +5,28 @@ import { pbkdf2Sync } from "crypto"
 import { jwtVerify, SignJWT } from "jose"
 import { randomText } from "./tools"
 
-// get from env or make random str 
-const JWTToken = new TextEncoder().encode(process.env.JWT_TOKEN || randomText(16))
+// get from env or make random str
+const JWTToken = new TextEncoder().encode(
+    process.env.JWT_TOKEN || randomText(16),
+)
 
-export const getUserByToken = cache(async (token: string): Promise<string | null> => {
+export const getUserByToken = cache(
+    async (token: string): Promise<string | null> => {
+        const jwt = await jwtVerify(token, JWTToken, { algorithms: ["HS256"] })
+        const userId = jwt.payload.sub
 
-    const jwt = await jwtVerify(token, JWTToken, { algorithms: ['HS256'] })
-    const userId = jwt.payload.sub
+        if (!userId) return null
 
-    if (!userId) return null
-
-    return userId
-})
+        return userId
+    },
+)
 
 export const createUserToken = (user: { id: number }) => {
-    return new SignJWT({ 'hello': 'world' })
-        .setProtectedHeader({ alg: 'HS256' })
+    return new SignJWT({ hello: "world" })
+        .setProtectedHeader({ alg: "HS256" })
         .setIssuedAt()
-        .setNotBefore((Date.now() / 1000) - 60_000)
-        .setExpirationTime('7d')
+        .setNotBefore(Date.now() / 1000 - 60_000)
+        .setExpirationTime("7d")
         .setSubject(user.id.toString())
         .sign(JWTToken)
 }
@@ -45,7 +48,7 @@ export const getCurrentUser = cache(async () => {
     try {
         return await prisma.user.findUnique({
             where: {
-                id: parseInt(userId)
+                id: parseInt(userId),
             },
             // select: {
             //     username: true,
@@ -58,21 +61,27 @@ export const getCurrentUser = cache(async () => {
     }
 })
 
-
 export const createPasswordHash = async (password: string) => {
     const salt = randomText(16)
-    const hash = pbkdf2Sync(password, salt, 1000, 64, 'sha512')
-        .toString('hex')
+    const hash = pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex")
 
     return `sha512:${salt}:${hash}`
-};
+}
 
-export const verifyPassword = (proposedPassword: string, passwordHash: string) => {
-    const [algorithm, salt, hash] = passwordHash.split(':')
+export const verifyPassword = (
+    proposedPassword: string,
+    passwordHash: string,
+) => {
+    const [algorithm, salt, hash] = passwordHash.split(":")
     if (!algorithm || !salt || !hash) return false
 
-    const proposedHash = pbkdf2Sync(proposedPassword, salt, 1000, 64, algorithm)
-        .toString('hex')
+    const proposedHash = pbkdf2Sync(
+        proposedPassword,
+        salt,
+        1000,
+        64,
+        algorithm,
+    ).toString("hex")
 
     return proposedHash === hash
 }

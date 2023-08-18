@@ -5,7 +5,10 @@ import { NextResponse } from "next/server"
 
 const unauthorized = NextResponse.json({ unauthorized: true }, { status: 401 })
 
-export async function GET(request: Request, { params: { id } }: { params: { id: string } }) {
+export async function GET(
+    request: Request,
+    { params: { id } }: { params: { id: string } },
+) {
     // const params = new URL(request.url).searchParams
 
     // const id = params.params.id;
@@ -24,7 +27,6 @@ export async function GET(request: Request, { params: { id } }: { params: { id: 
         if (!user) return unauthorized
 
         return NextResponse.json(user)
-
     }
 
     const user = await prisma.user.findUnique({
@@ -33,11 +35,13 @@ export async function GET(request: Request, { params: { id } }: { params: { id: 
     })
 
     if (!user) {
-        return NextResponse.json({
-            error: "User not found"
-        }, { status: 404 })
+        return NextResponse.json(
+            {
+                error: "User not found",
+            },
+            { status: 404 },
+        )
     }
 
     return NextResponse.json(user)
 }
-

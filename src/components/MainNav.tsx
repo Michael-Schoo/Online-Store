@@ -17,7 +17,6 @@ const items = [
     { url: "/", text: "Home" },
     { url: "#items", text: "Items" },
     { url: "#about", text: "About" },
-
 ]
 
 export function MainNav({
@@ -30,47 +29,63 @@ export function MainNav({
 
     return (
         <>
-
             <nav
-                className={cn("flex items-center space-x-4 lg:space-x-6", className)}
+                className={cn(
+                    "flex items-center space-x-4 lg:space-x-6",
+                    className,
+                )}
                 {...props}
             >
-                <Link className="hidden items-center space-x-2 md:flex pe-8" href="/">
+                <Link
+                    className="hidden items-center space-x-2 pe-8 md:flex"
+                    href="/"
+                >
                     <LogoIcon />
-                    <span className="font-bold inline-block whitespace-nowrap">{siteName}</span>
+                    <span className="inline-block whitespace-nowrap font-bold">
+                        {siteName}
+                    </span>
                 </Link>
 
-                <button className="flex items-center space-x-2 md:hidden" onClick={() => setShowMobileMenu(!showMobileMenu)}>
+                <button
+                    className="flex items-center space-x-2 md:hidden"
+                    onClick={() => setShowMobileMenu(!showMobileMenu)}
+                >
                     {showMobileMenu ? <CloseIcon /> : <LogoIcon />}
-                    <span className="font-bold inline-block">
+                    <span className="inline-block font-bold">
                         {showMobileMenu ? "Close Menu" : siteName}
                     </span>
 
-                    <Arrow className={cn("transform transition-transform", showMobileMenu ? "-rotate-180" : "")} />
-
+                    <Arrow
+                        className={cn(
+                            "transform transition-transform",
+                            showMobileMenu ? "-rotate-180" : "",
+                        )}
+                    />
                 </button>
                 <div className="hidden gap-6 text-sm md:flex md:items-center">
-
                     {items.map((item) => (
                         // <HeaderLink key={item.url} url={item.url} text={item.text} />
-                        <Link key={item.url} href={item.url} className={cn(
-                            "text-sm font-medium transition-colors hover:text-primary",
-                            path !== item.url ? "text-muted-foreground" : ""
-                        )}>
+                        <Link
+                            key={item.url}
+                            href={item.url}
+                            className={cn(
+                                "text-sm font-medium transition-colors hover:text-primary",
+                                path !== item.url
+                                    ? "text-muted-foreground"
+                                    : "",
+                            )}
+                        >
                             {item.text}
                         </Link>
                     ))}
                 </div>
-
             </nav>
             {showMobileMenu && (
                 <MobileHeader close={() => setShowMobileMenu(false)} />
             )}
         </>
-
     )
 }
-
 
 function MobileHeader({ close }: { close: () => void }) {
     useLockBody()
@@ -78,14 +93,15 @@ function MobileHeader({ close }: { close: () => void }) {
     return (
         <div
             className={cn(
-                "fixed inset-0 top-16 z-50 grid h-[calc(100vh-4rem)] grid-flow-row auto-rows-max overflow-auto p-6 pb-32 shadow-md animate-in slide-in-from-bottom-80 md:hidden"
+                "fixed inset-0 top-16 z-50 grid h-[calc(100vh-4rem)] grid-flow-row auto-rows-max overflow-auto p-6 pb-32 shadow-md animate-in slide-in-from-bottom-80 md:hidden",
             )}
         >
-            <div className="relative z-20 grid gap-6 rounded-md bg-popover p-4 text-popover-foreground shadow-md border">
+            <div className="relative z-20 grid gap-6 rounded-md border bg-popover p-4 text-popover-foreground shadow-md">
                 <Link href="/" className="flex items-center space-x-2">
                     <LogoIcon />
-                    <span className="font-bold whitespace-nowrap">{siteName}</span>
-
+                    <span className="whitespace-nowrap font-bold">
+                        {siteName}
+                    </span>
                 </Link>
 
                 <nav className="grid grid-flow-row auto-rows-max text-sm">
@@ -95,7 +111,7 @@ function MobileHeader({ close }: { close: () => void }) {
                             href={item.url}
                             className={cn(
                                 "flex w-full items-center rounded-md p-2 text-sm font-medium hover:underline",
-                                path === item.url && "font-bold"
+                                path === item.url && "font-bold",
                             )}
                             onClick={close}
                         >
@@ -109,5 +125,4 @@ function MobileHeader({ close }: { close: () => void }) {
             </div>
         </div>
     )
-
 }

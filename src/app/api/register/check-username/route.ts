@@ -1,7 +1,6 @@
-import prisma from "@/lib/prisma";
-import { usernameRegex } from "@/lib/tools";
-import { NextResponse } from "next/server";
-
+import prisma from "@/lib/prisma"
+import { usernameRegex } from "@/lib/tools"
+import { NextResponse } from "next/server"
 
 export const revalidate = 0
 
@@ -10,21 +9,26 @@ export async function GET(request: Request) {
 
     const username = params.get("username")
     if (!username) {
-        return NextResponse.json({
-            error: "No username provided"
-        }, { status: 400 })
+        return NextResponse.json(
+            {
+                error: "No username provided",
+            },
+            { status: 400 },
+        )
     }
 
     const usernameUsed = await prisma.user.findUnique({
         where: {
-            username: username
-        }
+            username: username,
+        },
     })
 
-    return NextResponse.json({
-        available: !usernameUsed,
-        regexValid: usernameRegex.test(username),
-        username
-    }, { status: 200 });
-
+    return NextResponse.json(
+        {
+            available: !usernameUsed,
+            regexValid: usernameRegex.test(username),
+            username,
+        },
+        { status: 200 },
+    )
 }

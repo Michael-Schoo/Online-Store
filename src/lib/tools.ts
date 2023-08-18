@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from "crypto"
 
 export const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/
 export const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
@@ -8,16 +8,18 @@ export const customAWSRegex = /^[a-zA-Z0-9-\.]+$/
 
 export const tokenLife = 1000 * 60 * 60 * 24 * 7 // 7 days
 
-
 export const currencies = [
     { name: "USD", symbol: "$" },
     { name: "AUD", symbol: "A$" },
 ]
 
+export const wait = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms))
 
-export const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-
-export async function minWait<T extends any>(ms: number, fn: () => Promise<T> | T) {
+export async function minWait<T extends any>(
+    ms: number,
+    fn: () => Promise<T> | T,
+) {
     const time = Date.now()
     const res = await fn()
     const timePassed = Date.now() - time
@@ -28,21 +30,31 @@ export async function minWait<T extends any>(ms: number, fn: () => Promise<T> | 
     return res
 }
 
-
-export function generateAvatarUrl(emailAddress: string, options: { defaultImage?: string } = {}) {
-    const defaultImage = options.defaultImage || "";
+export function generateAvatarUrl(
+    emailAddress: string,
+    options: { defaultImage?: string } = {},
+) {
+    const defaultImage = options.defaultImage || ""
     const emailHash = crypto
         .createHash("md5")
         .update(emailAddress)
-        .digest("hex");
+        .digest("hex")
 
-    return `https://www.gravatar.com/avatar/${emailHash}?d=${defaultImage}`;
+    return `https://www.gravatar.com/avatar/${emailHash}?d=${defaultImage}`
 }
 
-export const randomText = (size = 16) => crypto.randomBytes(size).toString('hex');
+export const randomText = (size = 16) =>
+    crypto.randomBytes(size).toString("hex")
 
-
-export const getListingImage = ({ awsKey: s3Key, customAWS, customURL }: { awsKey?: string | null, customAWS?: string | null, customURL?: string | null }) => {
+export const getListingImage = ({
+    awsKey: s3Key,
+    customAWS,
+    customURL,
+}: {
+    awsKey?: string | null
+    customAWS?: string | null
+    customURL?: string | null
+}) => {
     if (customAWS) {
         if (!customAWSRegex.test(customAWS)) {
             // TODO: better error

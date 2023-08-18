@@ -10,11 +10,13 @@ export async function POST(request: Request) {
     const password = data?.["password"]
 
     if (!email || !password) {
-        return NextResponse.json({
-            error: "No email or password provided"
-        }, { status: 400 })
+        return NextResponse.json(
+            {
+                error: "No email or password provided",
+            },
+            { status: 400 },
+        )
     }
-
 
     // try and find user
     const user = await prisma.user.findUnique({
@@ -24,13 +26,16 @@ export async function POST(request: Request) {
             password: true,
             email: true,
             username: true,
-        }
+        },
     })
 
     if (!user || !verifyPassword(password, user.password)) {
-        return NextResponse.json({
-            error: "Invalid email or password"
-        }, { status: 400 })
+        return NextResponse.json(
+            {
+                error: "Invalid email or password",
+            },
+            { status: 400 },
+        )
     }
 
     cookies().set({
@@ -46,8 +51,7 @@ export async function POST(request: Request) {
             id: user.id,
             email: user.email,
             username: user.username,
-        }
-
+        },
     })
 }
 

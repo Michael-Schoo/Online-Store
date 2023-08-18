@@ -1,6 +1,13 @@
-'use client'
+"use client"
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { FormEvent, useEffect, useState } from "react"
 import { Label } from "@/components/ui/label"
@@ -9,46 +16,44 @@ import { minWait, wait } from "@/lib/tools"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
-
 export default function Login() {
-
     const [error, setError] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const router = useRouter()
 
-
     const login = async (email: string, password: string) => {
         setLoading(true)
-        
+
         if (!email || !password) {
-            await wait(500);
+            await wait(500)
             setError(true)
             setLoading(false)
             return
         }
 
-        const response = await minWait(500, () => fetch("/api/login", {
-            body: JSON.stringify({
-                email,
-                password
+        const response = await minWait(500, () =>
+            fetch("/api/login", {
+                body: JSON.stringify({
+                    email,
+                    password,
+                }),
+                method: "POST",
             }),
-            method: "POST"
-        }));
+        )
 
         const data = await response.json()
 
         if (data.success) {
             // document.location.href = "/"
             // get redirect param
-            const redirect = new URLSearchParams(document.location.search).get("redirect") || "/"
+            const redirect =
+                new URLSearchParams(document.location.search).get("redirect") ||
+                "/"
             router.push(redirect)
             router.refresh()
-        }
-
-        else if (data.error) {
+        } else if (data.error) {
             setError(true)
             setLoading(false)
-
         }
     }
 
@@ -59,12 +64,16 @@ export default function Login() {
         await login(email, password)
     }
 
-
     return (
-        <form onSubmit={handleAction} className="grid sm:min-h-[calc(100vh-4rem)] place-items-center p-4 sm:p-0">
-            <Card className="w-full sm:w-96 m-10">
+        <form
+            onSubmit={handleAction}
+            className="grid place-items-center p-4 sm:min-h-[calc(100vh-4rem)] sm:p-0"
+        >
+            <Card className="m-10 w-full sm:w-96">
                 <CardHeader className="space-y-1 text-center">
-                    <CardTitle className="text-2xl">Login to your account</CardTitle>
+                    <CardTitle className="text-2xl">
+                        Login to your account
+                    </CardTitle>
                     <CardDescription>
                         Enter your email below to login to your account
                     </CardDescription>
@@ -73,37 +82,41 @@ export default function Login() {
                 <CardContent className="grid gap-4">
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" placeholder="me@example.com"
+                        <Input
+                            id="email"
+                            type="email"
+                            placeholder="me@example.com"
                             className={error ? "invalid-input" : ""}
-                            onChange={e => setError(false)}
+                            onChange={(e) => setError(false)}
                         />
                     </div>
 
                     <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
-                        <Input id="password" type="password" placeholder="********"
+                        <Input
+                            id="password"
+                            type="password"
+                            placeholder="********"
                             className={error ? "invalid-input" : ""}
-                            onChange={e => setError(false)}
+                            onChange={(e) => setError(false)}
                         />
                     </div>
 
                     {error && (
-                        <div className="text-destructive -mt-4">
+                        <div className="-mt-4 text-destructive">
                             Invalid email or password
                         </div>
                     )}
-
                 </CardContent>
                 <CardFooter>
                     <Button className="w-full" role="submit" disabled={loading}>
-                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {loading && (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
                         Login
                     </Button>
                 </CardFooter>
             </Card>
-
-
         </form>
-
     )
 }

@@ -1,7 +1,6 @@
-
-import { redirect } from 'next/navigation'
-import Login from './login'
-import { getCurrentUser } from '@/lib/user'
+import { redirect } from "next/navigation"
+import Login from "./login"
+import { getCurrentUser } from "@/lib/user"
 
 export default async function LoginPage() {
     const currentUser = await getCurrentUser()
@@ -9,8 +8,5 @@ export default async function LoginPage() {
         return redirect("/")
     }
 
-    return (
-        <Login  />
-    )
+    return <Login />
 }
-

@@ -12,46 +12,64 @@ export async function POST(request: Request) {
     const username = data?.["username"]
 
     if (!email || !password || !username) {
-        return NextResponse.json({
-            error: "No email, password, or username provided"
-        }, { status: 400 })
+        return NextResponse.json(
+            {
+                error: "No email, password, or username provided",
+            },
+            { status: 400 },
+        )
     }
 
     // email used
     const emailUsed = await prisma.user.findUnique({ where: { email } })
     if (emailUsed) {
-        return NextResponse.json({
-            error: "Email is already taken"
-        }, { status: 409 })
+        return NextResponse.json(
+            {
+                error: "Email is already taken",
+            },
+            { status: 409 },
+        )
     }
 
     // username used
     const usernameUsed = await prisma.user.findUnique({ where: { username } })
     if (usernameUsed) {
-        return NextResponse.json({
-            error: "Username is already taken"
-        }, { status: 409 })
+        return NextResponse.json(
+            {
+                error: "Username is already taken",
+            },
+            { status: 409 },
+        )
     }
 
     // username regex
     if (!usernameRegex.test(username)) {
-        return NextResponse.json({
-            error: "Invalid username format"
-        }, { status: 400 })
+        return NextResponse.json(
+            {
+                error: "Invalid username format",
+            },
+            { status: 400 },
+        )
     }
 
     // email regex
     if (!emailRegex.test(email)) {
-        return NextResponse.json({
-            error: "Invalid email format"
-        }, { status: 400 })
+        return NextResponse.json(
+            {
+                error: "Invalid email format",
+            },
+            { status: 400 },
+        )
     }
 
     // password regex
     if (!passwordRegex.test(password)) {
-        return NextResponse.json({
-            error: "Invalid password format"
-        }, { status: 400 })
+        return NextResponse.json(
+            {
+                error: "Invalid password format",
+            },
+            { status: 400 },
+        )
     }
 
     const user = await prisma.user.create({
@@ -59,7 +77,7 @@ export async function POST(request: Request) {
             email,
             password: await createPasswordHash(password),
             username,
-        }
+        },
     })
 
     cookies().set({
@@ -75,8 +93,7 @@ export async function POST(request: Request) {
             id: user.id,
             email: user.email,
             username: user.username,
-        }
-
+        },
     })
 }
 

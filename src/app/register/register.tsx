@@ -1,7 +1,14 @@
-'use client'
+"use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { emailRegex, minWait, passwordRegex, usernameRegex } from "@/lib/tools"
@@ -9,18 +16,17 @@ import { FormEvent, useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
-
 export default function Register() {
-
     const router = useRouter()
 
-    const [username, setUsername] = useState('')
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
 
     const [usernameError, setUsernameError] = useState<string | false>(false)
-    const [usernameValid, setUsernameValid] = useState<boolean | null | undefined>(undefined)
-
+    const [usernameValid, setUsernameValid] = useState<
+        boolean | null | undefined
+    >(undefined)
 
     // verify that the username is valid (not taken)
     const verifyUsername = async (u?: string) => {
@@ -31,11 +37,15 @@ export default function Register() {
         // check username regex first
         const regexValid = usernameRegex.test(username)
         if (!regexValid) {
-            setUsernameError("Username must be between 3 and 20 characters long and can only contain letters, numbers and underscores")
+            setUsernameError(
+                "Username must be between 3 and 20 characters long and can only contain letters, numbers and underscores",
+            )
             return setUsernameValid(false)
         }
 
-        const response = await fetch(`/api/register/check-username?${new URLSearchParams({ username })}`)
+        const response = await fetch(
+            `/api/register/check-username?${new URLSearchParams({ username })}`,
+        )
 
         const data = await response.json()
         if (data.available) {
@@ -51,15 +61,15 @@ export default function Register() {
     }
 
     const [emailError, setEmailError] = useState<string | false>(false)
-    const [emailValid, setEmailValid] = useState<boolean | null | undefined>(undefined)
+    const [emailValid, setEmailValid] = useState<boolean | null | undefined>(
+        undefined,
+    )
 
     // verify that the email is valid (not taken)
     const verifyEmail = async (e?: string) => {
-
         setEmailValid(null)
         setEmailError(false)
         if (!email) return setEmailValid(false)
-
 
         // check email regex first
         const regexValid = emailRegex.test(email)
@@ -68,7 +78,9 @@ export default function Register() {
             return setEmailValid(false)
         }
 
-        const response = await fetch(`/api/register/check-email?${new URLSearchParams({ email })}`)
+        const response = await fetch(
+            `/api/register/check-email?${new URLSearchParams({ email })}`,
+        )
 
         const data = await response.json()
         if (data.available) {
@@ -83,7 +95,7 @@ export default function Register() {
 
     const [passwordError, setPasswordError] = useState<string | false>(false)
 
-    // verify that the password is valid 
+    // verify that the password is valid
     const verifyPassword = async (p?: string) => {
         setPasswordError(false)
         if (!password) return
@@ -115,14 +127,16 @@ export default function Register() {
         // if (hasErrors) return alert("Please fix the errors")
         setLoading(true)
 
-        const response = await minWait(500, () => fetch("/api/register", {
-            body: JSON.stringify({
-                username,
-                email,
-                password
+        const response = await minWait(500, () =>
+            fetch("/api/register", {
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password,
+                }),
+                method: "POST",
             }),
-            method: "POST"
-        }));
+        )
 
         const data = await response.json()
         setLoading(false)
@@ -133,13 +147,17 @@ export default function Register() {
         }
     }
 
-
     // TODO: https://getbootstrap.com/docs/5.3/forms/validation/#server-side
     return (
-        <form onSubmit={handleAction} className="grid sm:min-h-[calc(100vh-4rem)] place-items-center p-4 sm:p-0">
-            <Card className="w-full sm:w-[30rem] m-10">
+        <form
+            onSubmit={handleAction}
+            className="grid place-items-center p-4 sm:min-h-[calc(100vh-4rem)] sm:p-0"
+        >
+            <Card className="m-10 w-full sm:w-[30rem]">
                 <CardHeader className="space-y-1 text-center">
-                    <CardTitle className="text-2xl">Create an account</CardTitle>
+                    <CardTitle className="text-2xl">
+                        Create an account
+                    </CardTitle>
                     <CardDescription>
                         Enter your email below to create your account
                     </CardDescription>
@@ -147,52 +165,90 @@ export default function Register() {
                 <CardContent className="grid gap-4">
                     <div className="grid gap-2">
                         <Label htmlFor="displayname">Username</Label>
-                        <Input id="displayname" type="displayname" placeholder="@username"
-                            onChange={e => setUsername(e.target.value)}
-                            className={usernameError ? "invalid-input" : usernameValid ? "valid-input" : ""}
+                        <Input
+                            id="displayname"
+                            type="displayname"
+                            placeholder="@username"
+                            onChange={(e) => setUsername(e.target.value)}
+                            className={
+                                usernameError
+                                    ? "invalid-input"
+                                    : usernameValid
+                                    ? "valid-input"
+                                    : ""
+                            }
                         />
-                        {usernameError && <p className="text-destructive text-sm">{usernameError}</p>}
+                        {usernameError && (
+                            <p className="text-sm text-destructive">
+                                {usernameError}
+                            </p>
+                        )}
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="email">Email</Label>
-                        <Input id="email" type="email" placeholder="me@example.com"
-                            onChange={e => setEmail(e.target.value)}
-                            className={emailError ? "invalid-input" : emailValid ? "valid-input" : ""}
+                        <Input
+                            id="email"
+                            type="email"
+                            placeholder="me@example.com"
+                            onChange={(e) => setEmail(e.target.value)}
+                            className={
+                                emailError
+                                    ? "invalid-input"
+                                    : emailValid
+                                    ? "valid-input"
+                                    : ""
+                            }
                         />
-                        {emailError && <p className="text-destructive text-sm">{emailError}</p>}
+                        {emailError && (
+                            <p className="text-sm text-destructive">
+                                {emailError}
+                            </p>
+                        )}
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
-                        <Input id="password" type="password"
-                            onChange={e => setPassword(e.target.value)}
+                        <Input
+                            id="password"
+                            type="password"
+                            onChange={(e) => setPassword(e.target.value)}
                             className={passwordError ? "invalid-input" : ""}
                         />
-                        {passwordError && <p className="text-destructive text-sm">{passwordError}</p>}
+                        {passwordError && (
+                            <p className="text-sm text-destructive">
+                                {passwordError}
+                            </p>
+                        )}
                     </div>
                 </CardContent>
                 <CardFooter>
                     <Button className="w-full" role="submit" disabled={loading}>
-                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {loading && (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
                         Create account
                     </Button>
                 </CardFooter>
             </Card>
         </form>
-
     )
 }
 
-
 function Loading() {
     return (
-        <div className="input-group-append" >
+        <div className="input-group-append">
             <span className="input-group-text spinner-wrapper ">
-                <div className="spinner-grow spinner-grow-sm text-primary" role="status" style={{ marginLeft: "-25px", marginTop: "10px", zIndex: 100 }}>
-                    <span className="sr-only d-none">Loading...</span>
+                <div
+                    className="spinner-grow spinner-grow-sm text-primary"
+                    role="status"
+                    style={{
+                        marginLeft: "-25px",
+                        marginTop: "10px",
+                        zIndex: 100,
+                    }}
+                >
+                    <span className="d-none sr-only">Loading...</span>
                 </div>
             </span>
         </div>
     )
-
 }
-

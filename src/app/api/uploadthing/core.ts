@@ -1,8 +1,8 @@
-import prisma from "@/lib/prisma";
-import { getCurrentUser } from "@/lib/user";
-import { createUploadthing, type FileRouter } from "uploadthing/next";
+import prisma from "@/lib/prisma"
+import { getCurrentUser } from "@/lib/user"
+import { createUploadthing, type FileRouter } from "uploadthing/next"
 
-const f = createUploadthing();
+const f = createUploadthing()
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
@@ -11,29 +11,27 @@ export const ourFileRouter = {
         // Set permissions and file types for this FileRoute
         .middleware(async ({ req }) => {
             // This code runs on your server before upload
-            const user = await getCurrentUser();
+            const user = await getCurrentUser()
 
             // If you throw, the user will not be able to upload
-            if (!user) throw new Error("Unauthorized");
-
+            if (!user) throw new Error("Unauthorized")
 
             // Whatever is returned here is accessible in onUploadComplete as `metadata`
-            return { userId: user.id };
+            return { userId: user.id }
         })
         .onUploadComplete(async ({ metadata, file }) => {
             // This code RUNS ON YOUR SERVER after upload
-            console.log("Upload complete for userId:", metadata.userId);
+            console.log("Upload complete for userId:", metadata.userId)
 
-            console.log("file url", file.url);
+            console.log("file url", file.url)
 
             await prisma.uploadedFile.create({
                 data: {
                     key: file.key,
                     userId: metadata.userId,
-                }
+                },
             })
-
         }),
-} satisfies FileRouter;
+} satisfies FileRouter
 
-export type OurFileRouter = typeof ourFileRouter;
+export type OurFileRouter = typeof ourFileRouter

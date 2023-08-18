@@ -1,6 +1,5 @@
-'use client'
-import useSWR from "swr";
-
+"use client"
+import useSWR from "swr"
 
 interface User {
     id: number
@@ -18,13 +17,16 @@ async function getUser(userId: string) {
     return data
 }
 
-
 export function useUser(userId: string) {
-    const { data, error, mutate, isValidating } = useSWR<User>(`/user/${userId}`, () => getUser(userId), {
-        revalidateOnFocus: true,
-        revalidateOnReconnect: true,
-        shouldRetryOnError: false,
-    })
+    const { data, error, mutate, isValidating } = useSWR<User>(
+        `/user/${userId}`,
+        () => getUser(userId),
+        {
+            revalidateOnFocus: true,
+            revalidateOnReconnect: true,
+            shouldRetryOnError: false,
+        },
+    )
 
     return {
         user: data || null,
@@ -32,15 +34,18 @@ export function useUser(userId: string) {
         isError: error,
         mutate,
     }
-
 }
 
 export function useLoggedInUser() {
-    const { data, error, mutate, isValidating } = useSWR<LoggedInUser>(`/user/@me`, () => getUser("@me"), {
-        revalidateOnFocus: true,
-        revalidateOnReconnect: true,
-        shouldRetryOnError: false,
-    })
+    const { data, error, mutate, isValidating } = useSWR<LoggedInUser>(
+        `/user/@me`,
+        () => getUser("@me"),
+        {
+            revalidateOnFocus: true,
+            revalidateOnReconnect: true,
+            shouldRetryOnError: false,
+        },
+    )
 
     return {
         user: data || null,
