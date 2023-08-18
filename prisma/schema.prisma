@@ -12,27 +12,48 @@ generator client {
 }
 
 model User {
-  id                  Int                  @id @default(autoincrement())
-  email               String               @unique
-  username            String               @unique
-  password            String // hashed
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  admin               Boolean              @default(false)
-  listings            Listing[]
-  purchaces           Purchace[]
-  listingReviews      ListingReview[]
-  notifications       Notification[]
-  listingImages       ListingImage[]
-  unusedUploadedFiles UploadedFile[]
+  id             Int             @id @default(autoincrement())
+  email          String          @unique @db.VarChar(255)
+  username       String          @unique @db.VarChar(20)
+  password       String          @db.VarChar(200)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  admin          Boolean         @default(false)
+  listings       Listing[]
+  purchaces      Purchace[]
+  walets         Walet[]
+  listingReviews ListingReview[]
+  notifications  Notification[]
+  listingImages  ListingImage[]
+  uploadedFiles  UploadedFile[]
+}
+
+model Walet {
+  userId   Int
+  currency String  @db.Char(3)
+  balance  Decimal @default(0) @db.Decimal(10, 2)
+  default  Boolean @default(false)
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, currency])
+  @@index([userId])
+}
+
+model CurrencyConversion {
+  from      String   @db.Char(3)
+  to        String   @db.Char(3)
+  rate      Float
+  updatedAt DateTime @updatedAt
+
+  @@id([from, to])
 }
 
 model Listing {
   id            Int             @id @default(autoincrement())
-  name          String
-  description   String
+  name          String          @db.TinyText
+  description   String          @db.Text
   price         Float
-  currency      String          @default("USD") @db.VarChar(3)
+  currency      String          @default("USD") @db.Char(3)
   archived      Boolean         @default(false)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
@@ -49,13 +70,14 @@ model Listing {
   images        ListingImage[]
 
   @@index([userId])
+  @@index([published, archived])
 }
 
 model ListingImage {
   id        Int      @id @default(autoincrement())
-  customAWS String?
-  awsKey    String?
-  customURL String?
+  customAWS String?  @db.TinyText
+  awsKey    String?  @db.VarChar(255)
+  customURL String?  @db.Text
   listing   Listing? @relation(fields: [listingId], references: [id])
   listingId Int?
   userId    Int
@@ -67,7 +89,7 @@ model ListingImage {
 
 model ListingReview {
   id        Int      @id @default(autoincrement())
-  comment   String?
+  comment   String?  @db.Text
   rating    Int      @db.UnsignedTinyInt
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -87,7 +109,7 @@ model Purchace {
   listingId Int?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing   Listing? @relation(fields: [listingId], references: [id], onDelete: SetNull)
-  title     String
+  title     String   @db.TinyText
   price     Float
 
   @@index([userId])
@@ -95,7 +117,6 @@ model Purchace {
 }
 
 model Tag {
-  // id        Int       @id @default(autoincrement())
   name      String    @id @db.VarChar(20)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -106,16 +127,16 @@ model Notification {
   id        Int      @id @default(autoincrement())
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  message   String
+  message   String   @db.Text
   read      Boolean  @default(false)
-  url       String?
+  url       String?  @db.TinyText
   createdAt DateTime @default(now())
 
   @@index([userId])
 }
 
 model UploadedFile {
-  key        String   @id
+  key        String   @id @db.VarChar(255)
   userId     Int
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   uploadedAt DateTime @default(now())
