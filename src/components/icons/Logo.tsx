@@ -1,9 +1,11 @@
-export default function LogoIcon() {
+import { cn } from "@/lib/utils";
+
+export default function LogoIcon({ className }: { className?: string }) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 256 256"
-            className="h-6 w-6"
+            className={cn("h-6 w-6", className)}
         >
             <rect width="256" height="256" fill="none"></rect>
             <line

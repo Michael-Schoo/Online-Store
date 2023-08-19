@@ -49,22 +49,29 @@ export function UserNav({ user }: UserProps) {
             <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">
+                        <p className="text-sm font-medium">
                             @{user.username}
                         </p>
-                        <p className="text-xs leading-none text-muted-foreground">
+                        <p className="text-xs truncate text-muted-foreground">
                             {user.email}
                         </p>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
-                    <DropdownMenuItem>Purchases</DropdownMenuItem>
-                    <DropdownMenuItem>Settings</DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link href="/create-listing" className="cursor-pointer">
-                            New Listing
+                        <Link href="#profile" className="cursor-pointer">
+                            Profile
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="#purchases" className="cursor-pointer">
+                            Purchases
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="#settings" className="cursor-pointer">
+                            Settings
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
@@ -74,7 +81,7 @@ export function UserNav({ user }: UserProps) {
                 <DropdownMenuItem asChild>
                     <a href="/logout" className="cursor-pointer">
                         Log out
-                        <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                        {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
                     </a>
                 </DropdownMenuItem>
             </DropdownMenuContent>

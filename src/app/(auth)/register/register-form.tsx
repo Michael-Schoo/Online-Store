@@ -16,7 +16,7 @@ import { FormEvent, useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
-export default function Register() {
+export default function RegisterForm() {
     const router = useRouter()
 
     const [username, setUsername] = useState("")
@@ -61,9 +61,7 @@ export default function Register() {
     }
 
     const [emailError, setEmailError] = useState<string | false>(false)
-    const [emailValid, setEmailValid] = useState<boolean | null | undefined>(
-        undefined,
-    )
+    const [emailValid, setEmailValid] = useState<boolean | null | undefined>(undefined)
 
     // verify that the email is valid (not taken)
     const verifyEmail = async (e?: string) => {
@@ -149,37 +147,29 @@ export default function Register() {
 
     // TODO: https://getbootstrap.com/docs/5.3/forms/validation/#server-side
     return (
-        <form
-            onSubmit={handleAction}
-            className="grid place-items-center p-4 sm:min-h-[calc(100vh-4rem)] sm:p-0"
-        >
-            <Card className="m-10 w-full sm:w-[30rem]">
-                <CardHeader className="space-y-1 text-center">
-                    <CardTitle className="text-2xl">
-                        Create an account
-                    </CardTitle>
-                    <CardDescription>
-                        Enter your email below to create your account
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-4">
-                    <div className="grid gap-2">
+        <form onSubmit={handleAction} className="grid gap-6">
+            <div className="grid gap-2 space-y-2">
+                <div className="grid gap-2 space-y-2">
+                    <div className="grid gap-1">
                         <Label htmlFor="displayname">Username</Label>
                         <Input
                             id="displayname"
                             type="displayname"
                             placeholder="@username"
+                            disabled={loading}
+                            // autoCapitalize="none"
+                            // autoCorrect="off"
                             onChange={(e) => setUsername(e.target.value)}
                             className={
                                 usernameError
                                     ? "invalid-input"
                                     : usernameValid
-                                    ? "valid-input"
-                                    : ""
+                                        ? "valid-input"
+                                        : ""
                             }
                         />
                         {usernameError && (
-                            <p className="text-sm text-destructive">
+                            <p className="text-sm text-red-600">
                                 {usernameError}
                             </p>
                         )}
@@ -191,16 +181,16 @@ export default function Register() {
                             type="email"
                             placeholder="me@example.com"
                             onChange={(e) => setEmail(e.target.value)}
+                            disabled={loading}
+                            autoCapitalize="none"
+                            autoComplete="email"
+                            autoCorrect="off"
                             className={
-                                emailError
-                                    ? "invalid-input"
-                                    : emailValid
-                                    ? "valid-input"
-                                    : ""
+                                emailError ? "invalid-input" : emailValid ? "valid-input" : ""
                             }
                         />
                         {emailError && (
-                            <p className="text-sm text-destructive">
+                            <p className="text-sm text-red-600">
                                 {emailError}
                             </p>
                         )}
@@ -210,25 +200,28 @@ export default function Register() {
                         <Input
                             id="password"
                             type="password"
+                            placeholder="********"
                             onChange={(e) => setPassword(e.target.value)}
+                            disabled={loading}
+                            autoCapitalize="none"
+                            autoComplete="password"
+                            autoCorrect="off"
                             className={passwordError ? "invalid-input" : ""}
                         />
                         {passwordError && (
-                            <p className="text-sm text-destructive">
+                            <p className="text-sm text-red-600">
                                 {passwordError}
                             </p>
                         )}
                     </div>
-                </CardContent>
-                <CardFooter>
-                    <Button className="w-full" role="submit" disabled={loading}>
-                        {loading && (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Create account
-                    </Button>
-                </CardFooter>
-            </Card>
+                </div>
+                <Button className="w-full" role="submit" disabled={loading}>
+                    {loading && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Sign Up
+                </Button>
+            </div>
         </form>
     )
 }

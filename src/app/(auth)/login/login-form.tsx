@@ -1,22 +1,14 @@
 "use client"
 
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { FormEvent, useEffect, useState } from "react"
+import { FormEvent, useState } from "react"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { minWait, wait } from "@/lib/tools"
 import { Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 
-export default function Login() {
+export default function LoginForm() {
     const [error, setError] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
     const router = useRouter()
@@ -47,7 +39,7 @@ export default function Login() {
             // document.location.href = "/"
             // get redirect param
             const redirect =
-                new URLSearchParams(document.location.search).get("redirect") ||
+                new URLSearchParams(document.location.search).get("from") ||
                 "/"
             router.push(redirect)
             router.refresh()
@@ -65,58 +57,55 @@ export default function Login() {
     }
 
     return (
-        <form
-            onSubmit={handleAction}
-            className="grid place-items-center p-4 sm:min-h-[calc(100vh-4rem)] sm:p-0"
-        >
-            <Card className="m-10 w-full sm:w-96">
-                <CardHeader className="space-y-1 text-center">
-                    <CardTitle className="text-2xl">
-                        Login to your account
-                    </CardTitle>
-                    <CardDescription>
-                        Enter your email below to login to your account
-                    </CardDescription>
-                </CardHeader>
 
-                <CardContent className="grid gap-4">
-                    <div className="grid gap-2">
+        <form onSubmit={handleAction} className="grid gap-6">
+            <div className="grid gap-2 space-y-2">
+                <div className="grid gap-2">
+                    <div className="grid gap-1">
                         <Label htmlFor="email">Email</Label>
                         <Input
                             id="email"
                             type="email"
                             placeholder="me@example.com"
                             className={error ? "invalid-input" : ""}
+                            disabled={loading}
+                            autoCapitalize="none"
+                            autoComplete="email"
+                            autoCorrect="off"
                             onChange={(e) => setError(false)}
                         />
                     </div>
 
-                    <div className="grid gap-2">
+                    <div className="grid gap-2 pt-2">
                         <Label htmlFor="password">Password</Label>
                         <Input
                             id="password"
                             type="password"
                             placeholder="********"
                             className={error ? "invalid-input" : ""}
+                            disabled={loading}
+                            autoCapitalize="none"
+                            autoComplete="password"
+                            autoCorrect="off"
                             onChange={(e) => setError(false)}
                         />
                     </div>
 
                     {error && (
-                        <div className="-mt-4 text-destructive">
+                        <div className="text-sm text-red-600 mt-0">
                             Invalid email or password
                         </div>
                     )}
-                </CardContent>
-                <CardFooter>
-                    <Button className="w-full" role="submit" disabled={loading}>
-                        {loading && (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
-                        Login
-                    </Button>
-                </CardFooter>
-            </Card>
+                </div>
+
+                <Button className="w-full" role="submit" disabled={loading}>
+                    {loading && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
+                    Sign In
+                </Button>
+            </div>
         </form>
+
     )
 }

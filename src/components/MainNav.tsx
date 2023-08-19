@@ -14,9 +14,11 @@ import { Search } from "./Search"
 const siteName = "Web Store"
 
 const items = [
-    { url: "/", text: "Home" },
-    { url: "#items", text: "Items" },
-    { url: "#about", text: "About" },
+    // { url: "/", text: "Home" },
+    { url: "#saved", text: "Saved" },
+    { url: "#categories", text: "Categories" },
+    { url: "create-listing", text: "New" },
+    // { url: "#items", text: "All Listings" },
 ]
 
 export function MainNav({
@@ -31,13 +33,13 @@ export function MainNav({
         <>
             <nav
                 className={cn(
-                    "flex items-center space-x-4 lg:space-x-6",
+                    "flex items-center",
                     className,
                 )}
                 {...props}
             >
                 <Link
-                    className="hidden items-center space-x-2 pe-8 md:flex"
+                    className="hidden items-center space-x-2 me-8 md:flex"
                     href="/"
                 >
                     <LogoIcon />
@@ -62,6 +64,7 @@ export function MainNav({
                         )}
                     />
                 </button>
+                
                 <div className="hidden gap-6 text-sm md:flex md:items-center">
                     {items.map((item) => (
                         // <HeaderLink key={item.url} url={item.url} text={item.text} />
@@ -69,10 +72,10 @@ export function MainNav({
                             key={item.url}
                             href={item.url}
                             className={cn(
-                                "text-sm font-medium transition-colors hover:text-primary",
+                                "text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm",
                                 path !== item.url
-                                    ? "text-muted-foreground"
-                                    : "",
+                                    ? "text-foreground/60"
+                                    : "text-foreground",
                             )}
                         >
                             {item.text}

@@ -8,6 +8,8 @@ export default async function ListingPage({
 }: {
     params: { id: string }
 }) {
+    if (!id || !Number(id)) return notFound()
+
     const listing = await prisma.listing.findUnique({
         where: {
             id: Number(id),

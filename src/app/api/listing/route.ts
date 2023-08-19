@@ -4,7 +4,7 @@ import {
     validateName,
     validatePrice,
     validateTags,
-} from "@/app/create-listing/validators"
+} from "@/app/(main)/create-listing/validators"
 import prisma from "@/lib/prisma"
 import { customAWSRegex } from "@/lib/tools"
 import { getCurrentUser } from "@/lib/user"

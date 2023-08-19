@@ -9,14 +9,12 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Dispatch, FormEvent, SetStateAction } from "react"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Data } from "./create-listing"
 import { UploadDropzone } from "@/components/uploadthing"
 
-// You need to import our styles for the button to look right. Best to import in the root /layout.tsx but this is fine
-import "@uploadthing/react/styles.css"
 import { validateImages } from "./validators"
+import { cn } from "@/lib/utils"
 
 // upload images button
 // show images (with delete button)
@@ -66,21 +64,33 @@ export default function UploadImages({
 
                 <CardContent className="grid gap-4">
                     <div className="grid gap-2">
-                        <div className="rounded-xl border-4 border-dashed">
-                            <UploadDropzone
-                                endpoint="listingImages"
-                                onClientUploadComplete={(res) => {
-                                    // Do something with the response
-                                    console.log("Files: ", res)
-                                    addImages(res?.map((f) => f.key) || [])
-                                }}
-                                onUploadError={(error) => {
-                                    // Do something with the error.
-                                    alert(`ERROR! ${error.message}`)
-                                    console.log(error)
-                                }}
-                            />
-                        </div>
+                        {/* <div className="rounded-xl border-4 "> */}
+                        <UploadDropzone
+                            endpoint="listingImages"
+                            onClientUploadComplete={(res) => {
+                                // Do something with the response
+                                console.log("Files: ", res)
+                                addImages(res?.map((f) => f.key) || [])
+                            }}
+                            onUploadError={(error) => {
+                                // Do something with the error.
+                                alert(`ERROR! ${error.message}`)
+                                console.log(error)
+                            }}
+                            className="cursor-pointer"
+                            appearance={{
+                                container: "border-dashed border-4 rounded-xl border-border",
+                                // button: buttonVariants({ variant: "default" }),
+                                // label: "text-primary hover:text-primary/75",
+                                label: "w-auto",
+                                // allowedContent: "text-muted-foreground"
+                            }}
+
+                        // appearance={{
+                        //     container: "border-dashed"
+                        // }}
+                        />
+                        {/* </div> */}
 
                         {imagesError && (
                             <div className="text-red-500">{imagesError}</div>
