@@ -21,7 +21,16 @@ export async function POST(request: Request) {
     }
 
     // email used
-    const emailUsed = await prisma.user.findUnique({ where: { email } })
+    const emailUsed = await prisma.user.findUnique({
+        where: {
+            email
+        },
+        select: {
+            id: true
+        }
+
+    })
+    
     if (emailUsed) {
         return NextResponse.json(
             {
@@ -32,7 +41,15 @@ export async function POST(request: Request) {
     }
 
     // username used
-    const usernameUsed = await prisma.user.findUnique({ where: { username } })
+    const usernameUsed = await prisma.user.findUnique({
+        where: {
+            username
+        },
+        select: {
+            id: true
+        }
+    })
+
     if (usernameUsed) {
         return NextResponse.json(
             {

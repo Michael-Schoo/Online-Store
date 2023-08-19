@@ -17,7 +17,7 @@ const items = [
     // { url: "/", text: "Home" },
     { url: "#saved", text: "Saved" },
     { url: "#categories", text: "Categories" },
-    { url: "create-listing", text: "New" },
+    { url: "/create-listing", text: "New" },
     // { url: "#items", text: "All Listings" },
 ]
 

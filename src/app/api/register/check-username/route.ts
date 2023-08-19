@@ -21,6 +21,9 @@ export async function GET(request: Request) {
         where: {
             username: username,
         },
+        select: {
+            id: true
+        }
     })
 
     return NextResponse.json(
