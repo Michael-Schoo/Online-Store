@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation"
-import LoginForm from "./login-form"
 import { getCurrentUser } from "@/lib/user"
 import { Metadata } from "next"
 import Link from "next/link"
@@ -7,6 +6,7 @@ import Logo from "@/components/icons/Logo"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { ChevronLeft } from "lucide-react"
+import { UserAuthForm } from "../form"
 
 export default async function LoginPage() {
     const currentUser = await getCurrentUser()
@@ -41,7 +41,7 @@ export default async function LoginPage() {
                 </div>
                 
                 {/* the actual login part */}
-                <LoginForm />
+                <UserAuthForm />
 
                 <p className="px-8 text-center text-sm text-muted-foreground">
                     <Link

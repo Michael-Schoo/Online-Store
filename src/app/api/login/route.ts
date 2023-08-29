@@ -1,18 +1,24 @@
+import { MagicLogin } from "@/email/auth"
+import sendReactEmail from "@/email/send-email"
 import prisma from "@/lib/prisma"
+import { canonicalUrl, emailRegex } from "@/lib/tools"
 import { createUserToken, verifyPassword } from "@/lib/user"
-import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {
     const data = await request.json()
 
-    const email = data?.["email"]
-    const password = data?.["password"]
+    const email = data?.["email"] as string | undefined
 
-    if (!email || !password) {
+    if (!email) {
+        return NextResponse.json({ error: "No email" }, { status: 400 })
+    }
+
+    // email regex
+    if (!emailRegex.test(email)) {
         return NextResponse.json(
             {
-                error: "No email or password provided",
+                error: "Invalid email format",
             },
             { status: 400 },
         )
@@ -23,35 +29,70 @@ export async function POST(request: Request) {
         where: { email },
         select: {
             id: true,
-            password: true,
             email: true,
             username: true,
         },
     })
 
-    if (!user || !verifyPassword(password, user.password)) {
-        return NextResponse.json(
-            {
-                error: "Invalid email or password",
-            },
-            { status: 400 },
-        )
+    // if no user, create them an account
+    if (!user) {
+
+        // create username from email
+        let username = email.split("@")[0]
+
+        // see if user exists with that username
+        const findUsername = (username: string) => {
+            return prisma.user.findUnique({
+                where: {
+                    username
+                },
+                select: {
+                    id: true
+                }
+            })
+        }
+
+        const usernameUsed = await findUsername(username)
+
+        // if username is taken, add a random number to the end
+        if (usernameUsed) {
+            let foundUsername = false
+            let attempts = 0
+            while (!foundUsername) {
+                const random = Math.floor(Math.random() * 1000)
+                username = username + random
+                foundUsername = !!await findUsername(username)
+                attempts++
+            }
+        }
+
+        // create user
+        const user = await prisma.user.create({
+            data: {
+                email,
+                username
+            }
+        })
+
+        const token = await createUserToken(user)
+        const expiresFormatted = new Date(Date.now() + expires).toISOString()
+
+        const emailToSend = MagicLogin(canonicalUrl(`/api/auth?jwt=${token}&expires=${expiresFormatted}`), username, 'register')
+        sendReactEmail(emailToSend, "Activate your account", { email, name: username }, false)
     }
 
-    cookies().set({
-        name: "token",
-        value: await createUserToken(user),
-        expires: new Date(Date.now() + expires),
-        path: "/",
-    })
+    else {
+        // if user exists, send them a login link
+        const token = await createUserToken(user)
+        const expiresFormatted = new Date(Date.now() + expires).toISOString()
+
+        const emailToSend = MagicLogin(canonicalUrl(`/api/auth?jwt=${token}&expires=${expiresFormatted}`), user.username, 'login')
+        sendReactEmail(emailToSend, "Sign-in link for Online Store", { email, name: user.username }, false)
+    }
 
     return NextResponse.json({
         success: true,
-        user: {
-            id: user.id,
-            email: user.email,
-            username: user.username,
-        },
+        message: "Sent email"
     })
 }
 

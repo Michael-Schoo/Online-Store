@@ -7,6 +7,7 @@ module.exports = {
     // './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
     './node_modules/@uploadthing/react/dist/**',
+    '!./src/email/**/*.{ts,tsx}',
   ],
   theme: {
     container: {

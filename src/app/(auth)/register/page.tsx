@@ -1,5 +1,4 @@
 // import { register } from './actions'
-import RegisterForm from "./register-form"
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/user"
 import { Metadata } from "next"
@@ -8,6 +7,7 @@ import Logo from "@/components/icons/Logo"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { ChevronLeft } from "lucide-react"
+import { UserAuthForm } from "../form"
 
 // Server action defined inside a Server Component
 export default async function RegisterPage() {
@@ -54,7 +54,7 @@ export default async function RegisterPage() {
                         </p>
                     </div>
                     {/* the actual sign up part */}
-                    <RegisterForm />
+                    <UserAuthForm />
 
                     <p className="px-8 text-center text-sm text-muted-foreground">
                         By clicking continue, you agree to our{" "}

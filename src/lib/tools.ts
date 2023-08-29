@@ -70,3 +70,5 @@ export const getListingImage = ({
         return ""
     }
 }
+
+export const canonicalUrl = (path: string) => (process.env?.["BASE_PATH"] || 'http://localhost:3000') + path
