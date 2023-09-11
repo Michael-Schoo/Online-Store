@@ -85,6 +85,9 @@ export default function UploadImages({
                                 label: "w-auto",
                                 // allowedContent: "text-muted-foreground"
                             }}
+                            config={{
+                                mode: "auto"
+                            }}
 
                         // appearance={{
                         //     container: "border-dashed"

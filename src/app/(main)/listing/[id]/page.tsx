@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma"
+import { getCurrentUser } from "@/lib/session"
 import { getListingImage } from "@/lib/tools"
-import { getCurrentUser, getCurrentUserId } from "@/lib/user"
 import { notFound } from "next/navigation"
 
 export default async function ListingPage({
@@ -8,11 +8,11 @@ export default async function ListingPage({
 }: {
     params: { id: string }
 }) {
-    if (!id || !Number(id)) return notFound()
+    if (!id) return notFound()
 
     const listing = await prisma.listing.findUnique({
         where: {
-            id: Number(id),
+            id,
         },
         select: {
             id: true,
@@ -59,8 +59,8 @@ export default async function ListingPage({
     })
 
     if (!listing) return notFound()
-    const currentUser = await getCurrentUserId()
-    const isCreator = currentUser === listing.user.id.toString()
+    const currentUser = await getCurrentUser()
+    const isCreator = currentUser?.id === listing.user.id
     // if (!listing.published && !isCreator) {
     //     return "DRAFT... check later :)"
     //     // return notFound()

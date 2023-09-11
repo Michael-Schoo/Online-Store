@@ -1,5 +1,3 @@
-import { redirect } from "next/navigation"
-import { getCurrentUser } from "@/lib/user"
 import { Metadata } from "next"
 import Link from "next/link"
 import Logo from "@/components/icons/Logo"
@@ -9,10 +7,6 @@ import { ChevronLeft } from "lucide-react"
 import { UserAuthForm } from "../form"
 
 export default async function LoginPage() {
-    const currentUser = await getCurrentUser()
-    if (currentUser) {
-        return redirect("/")
-    }
 
     return (
         <div className="container flex h-screen w-screen flex-col items-center justify-center">

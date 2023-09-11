@@ -1,32 +1,51 @@
 "use client"
 
-import { Input } from "@/components/ui/input"
-import { FormEvent, useState } from "react"
-import { Label } from "@/components/ui/label"
-import { buttonVariants } from "@/components/ui/button"
-import { Loader2 } from "lucide-react"
-import { useToast } from "@/components/ui/use-toast"
+import * as React from "react"
+import { useSearchParams } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { signIn } from "next-auth/react"
+import { useForm } from "react-hook-form"
+import * as z from "zod"
+
 import { cn } from "@/lib/utils"
+import { userAuthSchema } from "@/lib/validations/auth"
+import { buttonVariants } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { toast } from "@/components/ui/use-toast"
 import GoogleIcon from "@/components/icons/Google"
+import { Loader2 } from "lucide-react"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
+type FormData = z.infer<typeof userAuthSchema>
+
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-    const [isLoading, setLoading] = useState<boolean>(false)
-    const [isGoogleLoading, setGoogleLoading] = useState<boolean>(false)
-    // const [errors]
-    const { toast } = useToast()
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormData>({
+        resolver: zodResolver(userAuthSchema),
+    })
+    const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
+    const searchParams = useSearchParams()
+    const callbackUrl = searchParams?.get("from") || "/"
 
-    const login = async (email: string) => {
-        setLoading(true)
 
-        const response = await fetch("/api/login", {
-            body: JSON.stringify({ email }),
-            method: "POST",
+    async function onSubmit(data: FormData) {
+        setIsLoading(true)
+
+        const signInResult = await signIn("email", {
+            email: data.email,
+            redirect: false,
+            callbackUrl
         })
-        setLoading(false)
 
-        if (!response?.ok) {
+        setIsLoading(false)
+
+        if (!signInResult?.ok) {
             return toast({
                 title: "Something went wrong.",
                 description: "Your sign in request failed. Please try again.",
@@ -40,29 +59,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         })
     }
 
-    const handleAction = async (form: FormEvent<HTMLFormElement>) => {
-        form.preventDefault()
-        const email = (form.target as any).email.value as string
-        await login(email)
-    }
-
-    const googleLogin = async () => {
-        setGoogleLoading(true)
-        toast({
-            title: "Not set up...",
-            description: "Google login isn't available yet...",
-        })
-
-        setTimeout(() => {
-            console.log("google login")
-            setGoogleLoading(false)
-        }, 1000);
-    }
-
-
     return (
         <div className={cn("grid gap-6", className)} {...props}>
-            <form onSubmit={handleAction}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid gap-2">
                     <div className="grid gap-1">
                         <Label className="sr-only" htmlFor="email">
@@ -76,13 +75,14 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             autoComplete="email"
                             autoCorrect="off"
                             disabled={isLoading}
-                            required
+                            // required
+                            {...register("email")}
                         />
-                        {/* {errors?.email && (
+                        {errors?.email && (
                             <p className="px-1 text-xs text-red-600">
                                 {errors.email.message}
                             </p>
-                        )} */}
+                        )}
                     </div>
                     <button className={cn(buttonVariants())} disabled={isLoading}>
                         {isLoading && (
@@ -107,7 +107,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             <button
                 type="button"
                 className={cn(buttonVariants({ variant: "outline" }))}
-                onClick={googleLogin}
+                onClick={() => {
+                    setIsGoogleLoading(true)
+                    signIn("google", { callbackUrl })
+                }}
                 disabled={isLoading || isGoogleLoading}
             >
                 {isGoogleLoading ? (

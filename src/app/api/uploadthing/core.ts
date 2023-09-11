@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma"
-import { getCurrentUser } from "@/lib/user"
+import { getCurrentUser } from "@/lib/session"
 import { createUploadthing, type FileRouter } from "uploadthing/next"
 
 const f = createUploadthing()

@@ -1,7 +1,7 @@
 import crypto from "crypto"
 
 export const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/
-export const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
+// export const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
 // export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
 export const passwordRegex = /^.{8,}$/
 export const customAWSRegex = /^[a-zA-Z0-9-\.]+$/
@@ -70,5 +70,3 @@ export const getListingImage = ({
         return ""
     }
 }
-
-export const canonicalUrl = (path: string) => (process.env?.["BASE_PATH"] || 'http://localhost:3000') + path

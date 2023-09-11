@@ -1,3 +1,5 @@
+'use client'
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import {
@@ -11,14 +13,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { generateAvatarUrl } from "@/lib/tools"
+import { signOut } from "next-auth/react"
 import Link from "next/link"
 
 interface UserProps {
     user: {
-        username: string
+        username: string,
         email: string
-        // admin: boolean,
-        // gravatar: string
     }
 }
 
@@ -28,6 +29,8 @@ function getInitials(username: string) {
 }
 
 export function UserNav({ user }: UserProps) {
+    // user.username = user.username || "Username"
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -49,7 +52,7 @@ export function UserNav({ user }: UserProps) {
             <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium">
+                        <p className="text-sm truncate font-medium">
                             @{user.username}
                         </p>
                         <p className="text-xs truncate text-muted-foreground">
@@ -78,11 +81,14 @@ export function UserNav({ user }: UserProps) {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem asChild>
-                    <a href="/logout" className="cursor-pointer">
-                        Log out
-                        {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
-                    </a>
+                <DropdownMenuItem
+                    className="cursor-pointer"
+                    onSelect={(event) => {
+                        event.preventDefault()
+                        signOut()
+                    }}
+                >
+                    Sign out
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

@@ -1,6 +1,4 @@
 // import { register } from './actions'
-import { redirect } from "next/navigation"
-import { getCurrentUser } from "@/lib/user"
 import { Metadata } from "next"
 import Link from "next/link"
 import Logo from "@/components/icons/Logo"
@@ -11,10 +9,6 @@ import { UserAuthForm } from "../form"
 
 // Server action defined inside a Server Component
 export default async function RegisterPage() {
-    const currentUser = await getCurrentUser()
-    if (currentUser) {
-        return redirect("/")
-    }
 
     return (
         <div className="container grid h-screen w-screen flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">

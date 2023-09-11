@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma"
-import { getCurrentUser, getUserByToken } from "@/lib/user"
+import { getCurrentUser } from "@/lib/session"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
@@ -13,24 +13,20 @@ export async function GET(
 
     // const id = params.params.id;
     if (id === "@me") {
-        const token = cookies().get("token")?.value
-        if (!token) return unauthorized
 
-        const id = await getUserByToken(token)
-        if (!id) return unauthorized
+        const currentUser = await getCurrentUser()
+        if (!currentUser) return unauthorized
 
         const user = await prisma.user.findUnique({
-            where: { id: Number(id) },
-            select: { id: true, username: true, email: true, admin: true },
+            where: { id: currentUser.id },
+            select: { id: true, username: true, admin: true, email: true },
         })
-
-        if (!user) return unauthorized
 
         return NextResponse.json(user)
     }
 
     const user = await prisma.user.findUnique({
-        where: { id: Number(id) },
+        where: { id },
         select: { id: true, username: true, admin: true },
     })
 

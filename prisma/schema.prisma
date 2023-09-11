@@ -11,14 +11,50 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Account {
+  id                String   @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @db.Text
+  access_token      String?  @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?  @db.Text
+  session_state     String?
+  createdAt         DateTime @default(now()) @map(name: "created_at")
+  updatedAt         DateTime @default(now()) @map(name: "updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map(name: "accounts")
+}
+
+// Not actually used, but required for the adapter
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map(name: "sessions")
+}
+
 model User {
-  id             Int             @id @default(autoincrement())
+  id             String          @id @default(cuid())
   email          String          @unique @db.VarChar(255)
-  username       String          @unique @db.VarChar(20)
+  username       String          @unique @default(cuid()) @db.VarChar(25)
+  admin          Boolean         @default(false)
+  emailVerified  DateTime?
+  image          String?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
-  admin          Boolean         @default(false)
-  // verified       Boolean         @default(false)
   listings       Listing[]
   purchaces      Purchace[]
   walets         Walet[]
@@ -26,30 +62,35 @@ model User {
   notifications  Notification[]
   listingImages  ListingImage[]
   uploadedFiles  UploadedFile[]
+  accounts       Account[]
+  sessions       Session[]
+
+  @@index([email])
+  @@index([username])
+  @@map(name: "users")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map(name: "verification_tokens")
 }
 
 model Walet {
-  userId   Int
-  currency String  @db.Char(3)
-  balance  Decimal @default(0) @db.Decimal(10, 2)
-  default  Boolean @default(false)
-  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  balance Decimal @default(0) @db.Decimal(10, 2)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@id([userId, currency])
+  @@id([userId])
   @@index([userId])
-}
-
-model CurrencyConversion {
-  from      String   @db.Char(3)
-  to        String   @db.Char(3)
-  rate      Float
-  updatedAt DateTime @updatedAt
-
-  @@id([from, to])
+  @@map(name: "walets")
 }
 
 model Listing {
-  id            Int             @id @default(autoincrement())
+  id            String          @id @default(cuid())
   name          String          @db.TinyText
   description   String          @db.Text
   price         Float
@@ -61,7 +102,7 @@ model Listing {
   published     Boolean         @default(false)
   // if there is a purchace or bid, it is locked for edits
   locked        Boolean         @default(false)
-  userId        Int
+  userId        String
   averageRating Float?
   user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   tags          Tag[]
@@ -71,42 +112,45 @@ model Listing {
 
   @@index([userId])
   @@index([published, archived])
+  @@map(name: "listings")
 }
 
 model ListingImage {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   customAWS String?  @db.TinyText
   awsKey    String?  @db.VarChar(255)
   customURL String?  @db.Text
   listing   Listing? @relation(fields: [listingId], references: [id])
-  listingId Int?
-  userId    Int
+  listingId String?
+  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([listingId])
   @@index([userId])
+  @@map(name: "listing_images")
 }
 
 model ListingReview {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   comment   String?  @db.Text
   rating    Int      @db.UnsignedTinyInt
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  listingId Int
-  userId    Int
+  listingId String
+  userId    String
   listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([listingId])
   @@index([userId])
+  @@map("listing_reviews")
 }
 
 model Purchace {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   time      DateTime @default(now())
-  userId    Int
-  listingId Int?
+  userId    String
+  listingId String?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   listing   Listing? @relation(fields: [listingId], references: [id], onDelete: SetNull)
   title     String   @db.TinyText
@@ -114,6 +158,7 @@ model Purchace {
 
   @@index([userId])
   @@index([listingId])
+  @@map(name: "purchaces")
 }
 
 model Tag {
@@ -121,11 +166,13 @@ model Tag {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   items     Listing[]
+
+  @@map(name: "tags")
 }
 
 model Notification {
-  id        Int      @id @default(autoincrement())
-  userId    Int
+  id        String   @id @default(cuid())
+  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   message   String   @db.Text
   read      Boolean  @default(false)
@@ -133,14 +180,16 @@ model Notification {
   createdAt DateTime @default(now())
 
   @@index([userId])
+  @@map(name: "notifications")
 }
 
 model UploadedFile {
   key        String   @id @db.VarChar(255)
-  userId     Int
+  userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   uploadedAt DateTime @default(now())
   used       Boolean  @default(false)
 
   @@index([userId])
+  @@map(name: "uploaded_files")
 }

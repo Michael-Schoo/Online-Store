@@ -4,6 +4,7 @@ import "./globals.css"
 import "./styles.css"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
+import {ReactNode} from "react";
 
 const fontSans = FontSans({
     subsets: ["latin"],
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
     children,
 }: {
-    children: React.ReactNode
+    children: ReactNode
 }) {
     return (
         <html lang="en">

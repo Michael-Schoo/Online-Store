@@ -72,9 +72,7 @@ export const MagicLogin = (magicLink: string, username: string, intention: "regi
                         </a>
 
                         <p className='m-body'>
-                            {/* // TODO: make below the actual */}
-                            {/* This link expires in 24 hours and can only be used once. */}
-                            This link expires in 7 days and can be used unlimited times.
+                            This link expires in 24 hours and can only be used once.
                         </p>
 
                         {intention === "login" && (

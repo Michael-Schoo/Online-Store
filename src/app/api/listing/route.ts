@@ -6,8 +6,8 @@ import {
     validateTags,
 } from "@/app/(main)/create-listing/validators"
 import prisma from "@/lib/prisma"
+import { getCurrentUser } from "@/lib/session"
 import { customAWSRegex } from "@/lib/tools"
-import { getCurrentUser } from "@/lib/user"
 import { NextResponse } from "next/server"
 
 export async function POST(request: Request) {

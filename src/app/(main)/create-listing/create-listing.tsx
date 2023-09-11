@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ListingInfoBasic from "./basic-listing-config"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ListingReview from "./review-listing"
 import UploadImages from "./upload-images"
 

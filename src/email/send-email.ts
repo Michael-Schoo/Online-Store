@@ -1,20 +1,14 @@
 import { ReactElement } from "react";
 import { render } from '@react-email/render';
+import { env } from "@/env";
 
 export default async function sendReactEmail(jsx: ReactElement, subject: string, recipient: { email: string, name: string }, thread = true) {
     const html = render(jsx);
     const text = render(jsx, { plainText: true }); 
 
-    if (!process.env.EMAIL_API_URL) {
-        throw new Error("EMAIL_API_URL is not defined");
-    }
-
-    if (!process.env.EMAIL_SENDER) {
-        throw new Error("EMAIL_SENDER is not defined");
-    }
     
 
-    await fetch(process.env.EMAIL_API_URL, {
+    await fetch(env.EMAIL_API_URL, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -27,7 +21,7 @@ export default async function sendReactEmail(jsx: ReactElement, subject: string,
                 { to: [recipient] }
             ],
             from: {
-                email: process.env.EMAIL_SENDER,
+                email: env.SMTP_FROM,
                 name: "Store App"
             },
             subject,
