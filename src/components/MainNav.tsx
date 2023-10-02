@@ -11,13 +11,13 @@ import { useLockBody } from "./hooks/use-lock-body"
 import Arrow from "./icons/Arrow"
 import { Search } from "./Search"
 
-const siteName = "Web Store"
+const siteName = "Web Lister"
 
 const items = [
     // { url: "/", text: "Home" },
     { url: "#saved", text: "Saved" },
     { url: "#categories", text: "Categories" },
-    { url: "/create-listing", text: "New" },
+    { url: "/new", text: "New" },
     // { url: "#items", text: "All Listings" },
 ]
 
@@ -64,7 +64,7 @@ export function MainNav({
                         )}
                     />
                 </button>
-                
+
                 <div className="hidden gap-6 text-sm md:flex md:items-center">
                     {items.map((item) => (
                         // <HeaderLink key={item.url} url={item.url} text={item.text} />
@@ -100,7 +100,7 @@ function MobileHeader({ close }: { close: () => void }) {
             )}
         >
             <div className="relative z-20 grid gap-6 rounded-md border bg-popover p-4 text-popover-foreground shadow-md">
-                <Link href="/" className="flex items-center space-x-2">
+                <Link href="/" className="flex items-center space-x-2" onClick={close}>
                     <LogoIcon />
                     <span className="whitespace-nowrap font-bold">
                         {siteName}
@@ -123,8 +123,6 @@ function MobileHeader({ close }: { close: () => void }) {
                     ))}
                 </nav>
                 <Search className="w-full" />
-
-                {/* {children} */}
             </div>
         </div>
     )

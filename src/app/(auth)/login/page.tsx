@@ -4,7 +4,7 @@ import Logo from "@/components/icons/Logo"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { ChevronLeft } from "lucide-react"
-import { UserAuthForm } from "../form"
+import { UserAuthForm } from "../form.client"
 
 export default async function LoginPage() {
 

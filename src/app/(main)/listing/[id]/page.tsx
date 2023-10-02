@@ -1,6 +1,5 @@
 import prisma from "@/lib/prisma"
 import { getCurrentUser } from "@/lib/session"
-import { getListingImage } from "@/lib/tools"
 import { notFound } from "next/navigation"
 
 export default async function ListingPage({
@@ -19,24 +18,24 @@ export default async function ListingPage({
             name: true,
             description: true,
             price: true,
-            currency: true,
+            // currency: true,
             publishedAt: true,
             published: true,
             averageRating: true,
-            reviews: {
-                select: {
-                    id: true,
-                    rating: true,
-                    comment: true,
-                    createdAt: true,
-                    user: {
-                        select: {
-                            username: true,
-                            id: true,
-                        },
-                    },
-                },
-            },
+            // reviews: {
+            //     select: {
+            //         id: true,
+            //         rating: true,
+            //         comment: true,
+            //         createdAt: true,
+            //         user: {
+            //             select: {
+            //                 username: true,
+            //                 id: true,
+            //             },
+            //         },
+            //     },
+            // },
             tags: {
                 select: {
                     name: true,
@@ -50,9 +49,8 @@ export default async function ListingPage({
             },
             images: {
                 select: {
-                    awsKey: true,
-                    customAWS: true,
-                    customURL: true,
+                    url: true,
+                    id: true
                 },
             },
         },
@@ -66,14 +64,14 @@ export default async function ListingPage({
     //     // return notFound()
     // };
 
-    const images = listing.images.map(getListingImage)
 
     return (
-        <div>
+        <main>
             <h1>{listing.name}</h1>
             <p>{listing.description}</p>
             <p>
-                ${listing.price} ({listing.currency})
+                {/* ${listing.price} ({listing.currency}) */}
+                ${listing.price} (USD)
             </p>
             <p>{listing.tags.map((tag) => tag.name).join(", ")}</p>
             <p>{listing.publishedAt?.toISOString()}</p>
@@ -83,25 +81,11 @@ export default async function ListingPage({
                 {isCreator && " (You!)"}
             </p>
             <div>
-                {images.map((img, i) => (
+                {listing.images.map((img, i) => (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img key={i} src={img} alt="" crossOrigin="anonymous" />
+                    <img key={img.id} src={img.url} alt="" crossOrigin="anonymous" />
                 ))}
             </div>
-            <div>
-                <ul>
-                    {listing.reviews.map((review) => (
-                        <li key={review.id}>
-                            <p>
-                                {review.rating}/5 (
-                                {review.createdAt.toISOString()})
-                            </p>
-                            <p>@{review.user.username}</p>
-                            <p>{review.comment}</p>
-                        </li>
-                    ))}
-                </ul>
-            </div>
-        </div>
+        </main>
     )
 }

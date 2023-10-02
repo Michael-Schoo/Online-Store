@@ -5,7 +5,7 @@ import Logo from "@/components/icons/Logo"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { ChevronLeft } from "lucide-react"
-import { UserAuthForm } from "../form"
+import { UserAuthForm } from "../form.client"
 
 // Server action defined inside a Server Component
 export default async function RegisterPage() {

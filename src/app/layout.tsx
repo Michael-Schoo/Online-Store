@@ -4,15 +4,18 @@ import "./globals.css"
 import "./styles.css"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
-import {ReactNode} from "react";
+import { ReactNode } from "react";
 
 const fontSans = FontSans({
     subsets: ["latin"],
 })
 
 export const metadata: Metadata = {
-    title: "Online Store",
-    description: "A store?",
+    title: {
+        default: "Online Listings",
+        template: "%s | Online Listings",
+    },
+    description: "A store/a place to list things?",
 }
 
 export default function RootLayout({

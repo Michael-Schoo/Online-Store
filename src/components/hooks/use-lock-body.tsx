@@ -10,11 +10,12 @@ export function useLockBody() {
 
         // blurring the background
         const main = document.querySelector("body main") as HTMLElement
-        main.style.filter = "blur(1px)"
+        if (main) main.style.filter = "blur(1px)"
+        else console.warn("No main element found")
 
         return () => {
             document.body.style.overflow = originalStyle
-            main.style.filter = "blur(0px)"
+            if (main) main.style.filter = "blur(0px)"
         }
     }, [])
 }

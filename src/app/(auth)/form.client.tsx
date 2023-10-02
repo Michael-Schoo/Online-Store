@@ -9,7 +9,7 @@ import * as z from "zod"
 
 import { cn } from "@/lib/utils"
 import { userAuthSchema } from "@/lib/validations/auth"
-import { buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
@@ -84,12 +84,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             </p>
                         )}
                     </div>
-                    <button className={cn(buttonVariants())} disabled={isLoading}>
+                    <Button disabled={isLoading}>
                         {isLoading && (
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                         )}
                         Sign In with Email
-                    </button>
+                    </Button>
                 </div>
             </form>
 
@@ -104,9 +104,9 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 </div>
             </div>
 
-            <button
+            <Button
                 type="button"
-                className={cn(buttonVariants({ variant: "outline" }))}
+                variant="outline"
                 onClick={() => {
                     setIsGoogleLoading(true)
                     signIn("google", { callbackUrl })
@@ -119,7 +119,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                     <GoogleIcon className="mr-2 h-4 w-4" />
                 )}{" "}
                 Google
-            </button>
+            </Button>
         </div >
     )
 }
