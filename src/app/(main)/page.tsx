@@ -1,10 +1,21 @@
 import prisma from "@/lib/prisma"
+import { getCurrentUser } from "@/lib/session"
 import Link from "next/link"
 
 export const revalidate = 0
 
 export default async function Home() {
-    const items = await prisma.listing.findMany()
+    const currentUser = await getCurrentUser()
+    const items = await prisma.listing.findMany({
+        where: {
+            // todo: fix temporary way to still see posts made by user
+            OR: [
+                { published: true },
+                { userId: currentUser?.id ?? '' }
+            ],
+            archived: false
+        }
+    })
 
     return (
         <main className="container">

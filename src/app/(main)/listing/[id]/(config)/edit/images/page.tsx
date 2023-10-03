@@ -9,41 +9,37 @@ import prisma from "@/lib/prisma"
 import { extractRouterConfig } from "uploadthing/server"
 import { ourFileRouter } from "@/app/api/uploadthing/core"
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { getListing } from "../../utils"
 
 export const metadata = {
     title: "Images",
     description: "Manage and create images for your listing.",
 }
 
-export default async function SettingsPage({
+export default async function ImagesPage({
     params: { id },
 }: {
     params: { id: string }
 }) {
     const user = await getCurrentUser()
 
-    const listing = await prisma.listing.findUnique({
+    const listing = await getListing(id, user?.id ?? '')
+
+    if (!listing || user?.id !== listing?.userId) {
+        redirect(authOptions?.pages?.signIn || "/login")
+    }
+
+    const images = await prisma.listingImage.findMany({
         where: {
-            id,
+            listingId: listing.id,
+            userId: user.id
         },
         select: {
-            userId: true,
+            alt: true,
             id: true,
-            images: {
-
-            }
+            url: true,
         }
-    })
-
-    if (!listing) return notFound()
-
-    if (!user?.id) {
-        return redirect(authOptions?.pages?.signIn || "/login")
-    }
-
-    if (user.id !== listing.userId) {
-        return notFound()
-    }
+    });
 
     return (
         <>
@@ -62,7 +58,7 @@ export default async function SettingsPage({
                     text={metadata.description}
                 />
                 <div className="grid gap-10">
-                    <ClientPage images={listing.images} listingId={listing.id} />
+                    <ClientPage images={images} listingId={listing.id} />
                 </div>
             </DashboardShell>
         </>

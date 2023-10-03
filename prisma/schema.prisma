@@ -162,14 +162,14 @@ model SavedListings {
 }
 
 model ListingAnalytics {
-  id        String   @id @default(cuid())
   listingId String
   listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
   views     Int      @default(0)
   day       DateTime @db.Date() // @default(now())
 
-  @@unique([listingId, day])
+  @@id([listingId, day])
   @@index([listingId, day])
+  @@index([listingId])
   @@map(name: "listing_analytics")
 }
 

@@ -37,7 +37,7 @@ export function PriceForm({ listing }: PriceFormProps) {
     } = useForm<FormData>({
         resolver: zodResolver(listingUpdateSchema.partial()),
         defaultValues: {
-            price: listing?.price || undefined
+            price: listing?.price ?? undefined
         },
     })
     const [isSaving, setIsSaving] = useState<boolean>(false)
@@ -86,9 +86,11 @@ export function PriceForm({ listing }: PriceFormProps) {
                             Price
                         </Label>
                         <Input
-                            id="name"
+                            id="price"
                             className="w-full sm:w-[400px]"
                             type="number"
+                            min={0}
+                            max={1_000}
                             size={50}
                             {...register("price", { valueAsNumber: true })}
                         />

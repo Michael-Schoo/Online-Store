@@ -73,8 +73,8 @@ export function EditInfoModal({ image, listing, currentAlt }: { image: string, l
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline" className="border-2 gap-2" size="sm">
-                    <PencilIcon/> Edit description
+                <Button variant="outline" className="border-2 gap-2 pl-3" size="sm">
+                    <PencilIcon className="w-4" /> Edit description
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
@@ -154,8 +154,8 @@ export function DeleteModal({ image, listing, name }: { image: string, listing: 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="destructive" size="sm">
-                    <Trash2Icon />
+                <Button variant="destructive" size="icon-sm">
+                    <Trash2Icon className="w-4"/>
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">

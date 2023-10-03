@@ -8,7 +8,6 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { UploadDropzone } from "@/components/uploadthing"
-import { ListingImage } from "@prisma/client"
 import { useRouter } from "next/navigation"
 import { toast } from "@/components/ui/use-toast"
 import { DeleteModal, EditInfoModal } from "./modal.client"
@@ -18,7 +17,7 @@ import { DeleteModal, EditInfoModal } from "./modal.client"
 // max 10 images
 // store list of ids in listing data
 
-export default function UploadImages({ images, listingId }: { images: ListingImage[], listingId: string }) {
+export default function UploadImages({ images, listingId }: { images: { alt: string | null, id: string, url: string}[], listingId: string }) {
 
     const router = useRouter()
 

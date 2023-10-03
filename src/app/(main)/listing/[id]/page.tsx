@@ -2,6 +2,31 @@ import prisma from "@/lib/prisma"
 import { getCurrentUser } from "@/lib/session"
 import { notFound } from "next/navigation"
 
+
+function addToAnalytics(listingId: string, day: Date | string) {
+    return prisma.listingAnalytics.upsert({
+        where: {
+            listingId_day: {
+                listingId,
+                day
+            }
+        },
+        update: {
+            views: {
+                increment: 1
+            }
+        },
+        create: {
+            listingId,
+            day,
+            views: 1,
+        },
+        select: {
+            views: true
+        }
+    })
+}
+
 export default async function ListingPage({
     params: { id },
 }: {
@@ -59,10 +84,21 @@ export default async function ListingPage({
     if (!listing) return notFound()
     const currentUser = await getCurrentUser()
     const isCreator = currentUser?.id === listing.user.id
-    // if (!listing.published && !isCreator) {
-    //     return "DRAFT... check later :)"
-    //     // return notFound()
-    // };
+    if (!listing.published && !isCreator) {
+        return "DRAFT... check later :)"
+        // return notFound()
+    };
+
+    if (listing.published) {
+        // add to analytics
+        // day is utc day (ie. 2023-10-09)
+        const now = new Date()
+        now.setUTCMinutes(0)
+        now.setUTCHours(0)
+        now.setUTCSeconds(0)
+        now.setMilliseconds(0)
+        await addToAnalytics(listing.id, now)
+    }
 
 
     return (

@@ -19,10 +19,8 @@ export default async function RegisterPage() {
                     "absolute left-4 top-4 md:left-8 md:top-8"
                 )}
             >
-                <>
-                    <ChevronLeft className="mr-2 h-4 w-4" />
-                    Back
-                </>
+                <ChevronLeft className="mr-2 h-4 w-4" />
+                Back
             </Link>
 
             <Link
@@ -34,7 +32,7 @@ export default async function RegisterPage() {
             >
                 Login
             </Link>
-            
+
             <div className="hidden h-full bg-muted lg:block" />
             <div className="lg:p-8">
                 <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">

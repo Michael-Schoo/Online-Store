@@ -7,6 +7,7 @@ import prisma from "@/lib/prisma"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Metadata } from "next"
 import { metadata as rootMetadata } from "@/app/layout"
+import { getListing } from "./utils"
 
 interface DashboardLayoutProps {
     children?: React.ReactNode,
@@ -35,14 +36,7 @@ export default async function DashboardLayout({
         return notFound()
     }
 
-    const listing = await prisma.listing.findUnique({
-        where: {
-            id,
-            userId: user.id
-        },
-
-    })
-
+    const listing = await getListing(id, user.id)
     if (!listing) return notFound()
 
     const dashboardConfig: SidebarNavItem[] = [

@@ -7,6 +7,7 @@ import { DashboardShell } from "@/components/DashboardShell"
 import { InformationForm } from "./information-form.client"
 import prisma from "@/lib/prisma"
 import { PriceForm } from "./price-form.client"
+import { getListing } from "../../utils"
 
 export const metadata = {
     title: "Information",
@@ -20,12 +21,7 @@ export default async function SettingsPage({
 }) {
     const user = await getCurrentUser()
 
-    const listing = await prisma.listing.findUnique({
-        where: {
-            id,
-        },
-    })
-
+    const listing = await getListing(id, user?.id ?? '')
     if (!listing) return notFound()
 
     if (user?.id !== listing.userId) {
@@ -42,7 +38,7 @@ export default async function SettingsPage({
             <div className="grid gap-10">
                 <InformationForm listing={listing} />
                 <PriceForm listing={listing} />
-                {/* //todo: tags section */}
+                {/* // todo: tags section */}
             </div>
         </DashboardShell>
     )
