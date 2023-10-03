@@ -90,7 +90,7 @@ export function PriceForm({ listing }: PriceFormProps) {
                             className="w-full sm:w-[400px]"
                             type="number"
                             min={0}
-                            max={1_000}
+                            max={10_000}
                             size={50}
                             {...register("price", { valueAsNumber: true })}
                         />

@@ -61,7 +61,7 @@ export default async function SettingsPage({
     const customErrors = {
         'Name (5-50 chars)': { required: errors?.name },
         'Description (10-500 chars)': { required: errors?.description },
-        'Price ($0 to $1,000)': { required: errors?.price },
+        'Price ($0 to $10,000)': { required: errors?.price },
         'Images (0-10)': { required: images.length > 10 ? "Too many images" : null, recommended: images.length === 0 ? "Recommended to have at least have one image" : null },
     }
 

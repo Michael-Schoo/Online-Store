@@ -37,14 +37,14 @@ export default async function SettingsPage({
     }) as { day: Date, views: number }[];
 
     const startDate = listing.publishedAt || analytics?.[0]?.day || new Date();
-    const currentDate = new Date();
+    const currentDate = new Date().setUTCHours(0, 0, 0, 0);
 
     // clone it
-    let checkDate = new Date(startDate.valueOf());
+    const checkDate = new Date(new Date(startDate.valueOf()).setUTCHours(0, 0, 0, 0));
 
     // fill in the gaps
-    while (checkDate.setHours(0, 0, 0, 0) < currentDate.setHours(0, 0, 0, 0)) {
-        checkDate.setDate(checkDate.getDate() + 1);
+    while (checkDate.getTime() < currentDate) {
+        checkDate.setUTCDate(checkDate.getUTCDate() + 1);
         if (analytics.find(item => item.day.getTime() === checkDate.getTime())) continue;
 
         analytics.push({
@@ -59,8 +59,6 @@ export default async function SettingsPage({
             day: item.day.toISOString().split('T')[0],
             'Page Visits': item.views
         }));
-
-    console.log(chartdata)
 
     return (
         <DashboardShell>

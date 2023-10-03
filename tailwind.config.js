@@ -8,7 +8,12 @@ module.exports = {
     './src/**/*.{ts,tsx}',
     './node_modules/@uploadthing/react/dist/**',
     '!./src/email/**/*.{ts,tsx}',
-    "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}", // Tremor module
+    // "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}", // Tremor module
+    "./node_modules/@tremor/react/dist/components/chart-elements/AreaChart/**/*.{js,ts,jsx,tsx}", // Button component
+    "./node_modules/@tremor/react/dist/components/chart-elements/common/**/*.{js,ts,jsx,tsx}", // Button component
+    "./node_modules/@tremor/react/dist/components/text-elements/Legend/**/*.{js,ts,jsx,tsx}", // Button component
+    "./node_modules/@tremor/react/dist/components/layout-elements/Flex/**/*.{js,ts,jsx,tsx}", // Button component
+    "./node_modules/@tremor/react/dist/lib/spacing.{js,ts,jsx,tsx}", // Button component
   ],
   theme: {
     container: {
@@ -161,30 +166,36 @@ module.exports = {
   safelist: [
     {
       pattern:
-        /^(bg-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        // /^(bg-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        /^(bg-(?:blue)-(?:500))$/,
       variants: ["hover", "ui-selected"],
     },
     {
       pattern:
-        /^(text-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        // /^(text-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        /^(text-(?:blue)-(?:500))$/,
       variants: ["hover", "ui-selected"],
     },
     {
       pattern:
-        /^(border-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        // /^(border-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        /^(border-(?:blue)-(?:500))$/,
       variants: ["hover", "ui-selected"],
     },
     {
       pattern:
-        /^(ring-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        // /^(ring-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        /^(ring-(?:blue)-(?:500))$/,
     },
     {
       pattern:
-        /^(stroke-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        // /^(stroke-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        /^(stroke-(?:blue)-(?:500))$/,
     },
     {
       pattern:
-        /^(fill-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        // /^(fill-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
+        /^(fill-(?:blue)-(?:500))$/,
     },
   ],
   plugins: [
