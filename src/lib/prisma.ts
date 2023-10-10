@@ -2,21 +2,25 @@
 import { connect } from '@planetscale/database';
 import { PrismaPlanetScale } from '@prisma/adapter-planetscale';
 import { PrismaClient } from '@prisma/client';
-import { env } from 'process';
+import { env } from '@/env';
 
-function getPrisma() {
+function getDB() {
     // Initialize Prisma Client with the PlanetScale serverless database driver
     const connection = connect({ url: env.DATABASE_URL });
     const adapter = new PrismaPlanetScale(connection);
     const prisma = new PrismaClient({ adapter, log: ["query"] });
 
-    return prisma 
+    return { connection, prisma }
 }
 
-// @ts-expect-error global variable
-const prisma: PrismaClient = global.prisma || getPrisma()
+declare namespace global {
+    var db: ReturnType<typeof getDB> | undefined
+}
 
-// @ts-expect-error global variable
-if (process.env.NODE_ENV === "development") global.prisma = prisma
+const db = global.db || getDB()
 
-export default prisma
+if (process.env.NODE_ENV === "development") global.db = db
+
+export const connection = db.connection
+export const prisma = db.prisma
+export default db.prisma
