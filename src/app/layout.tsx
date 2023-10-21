@@ -10,13 +10,13 @@ const fontSans = FontSans({
     subsets: ["latin"],
 })
 
-export const metadata: Metadata = {
+export const metadata = {
     title: {
         default: "Online Listings",
         template: "%s | Online Listings",
     },
     description: "A store/a place to list things?",
-}
+} satisfies Metadata
 
 export default function RootLayout({
     children,

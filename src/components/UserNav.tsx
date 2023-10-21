@@ -18,18 +18,20 @@ import Link from "next/link"
 
 interface UserProps {
     user: {
-        username: string,
-        email: string
+        name: string,
+        email: string,
+        id: string,
+        image?: string,
     }
 }
 
-function getInitials(username: string) {
-    // first 2 characters of username
-    return username.slice(0, 2).toUpperCase()
+function getInitials(name: string) {
+    // first 2 characters of name
+    return name.slice(0, 2).toUpperCase()
 }
 
 export function UserNav({ user }: UserProps) {
-    // user.username = user.username || "Username"
+    // user.name = user.name || "name"
 
     return (
         <DropdownMenu>
@@ -40,11 +42,11 @@ export function UserNav({ user }: UserProps) {
                 >
                     <Avatar className="h-8 w-8">
                         <AvatarImage
-                            src={generateAvatarUrl(user.email)}
-                            alt={`@${user.username}`}
+                            src={user.image}
+                            alt={`${user.name}`}
                         />
                         <AvatarFallback>
-                            {getInitials(user.username)}
+                            {getInitials(user.name)}
                         </AvatarFallback>
                     </Avatar>
                 </Button>
@@ -53,7 +55,7 @@ export function UserNav({ user }: UserProps) {
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                         <p className="text-sm truncate font-medium">
-                            @{user.username}
+                            {user.name}
                         </p>
                         <p className="text-xs truncate text-muted-foreground">
                             {user.email}
@@ -63,17 +65,17 @@ export function UserNav({ user }: UserProps) {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                        <Link href="#profile" className="cursor-pointer">
+                        <Link href={`/user/${user.id}`} className="cursor-pointer">
                             Profile
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link href="#purchases" className="cursor-pointer">
+                        <Link href="/purchases" className="cursor-pointer">
                             Purchases
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link href="#settings" className="cursor-pointer">
+                        <Link href="/settings" className="cursor-pointer">
                             Settings
                         </Link>
                     </DropdownMenuItem>

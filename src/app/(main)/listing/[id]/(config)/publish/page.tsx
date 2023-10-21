@@ -13,11 +13,12 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { ExternalLinkIcon } from "lucide-react"
 import { PublishModal } from "./modal.client"
+import { Metadata } from "next";
 
 export const metadata = {
     title: "Publish",
     description: "Publish your listing and do a final check.",
-}
+} satisfies Metadata
 
 export default async function SettingsPage({
     params: { id },

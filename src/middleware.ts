@@ -18,6 +18,12 @@ export default withAuth(
             return null
         }
 
+        if (req.nextUrl.pathname.startsWith("/profile")) {
+            if (isAuth) {
+                return NextResponse.redirect(new URL("/user/"+token?.id, req.url))
+            }
+        }
+
         if (!isAuth) {
             let from = req.nextUrl.pathname;
             if (req.nextUrl.search) {
@@ -42,5 +48,14 @@ export default withAuth(
 )
 
 export const config = {
-    matcher: ["/dashboard/:path*", "/new", "/login", "/register", "/listing/:path/edit/:path*", "/listing/:path/analytics"],
+    matcher: [
+        "/settings",
+        "/profile",
+        "/purchases",
+        "/new",
+        "/login",
+        "/register",
+        "/listing/:path/settings/:path*",
+        "/listing/:path/analytics"
+    ],
 }

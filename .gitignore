@@ -132,3 +132,5 @@ dist
 next-env.d.ts
 
 prisma/migrations
+
+.idea

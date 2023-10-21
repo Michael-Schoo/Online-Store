@@ -1,18 +1,17 @@
 import { notFound, redirect } from "next/navigation"
-
 import { authOptions } from "@/lib/auth"
 import { getCurrentUser } from "@/lib/session"
 import { DashboardHeader } from "@/components/DashboardHeader"
 import { DashboardShell } from "@/components/DashboardShell"
 import { InformationForm } from "./information-form.client"
-import prisma from "@/lib/prisma"
 import { PriceForm } from "./price-form.client"
 import { getListing } from "../../utils"
+import { Metadata } from "next";
 
 export const metadata = {
     title: "Information",
     description: "Manage the data for your listing.",
-}
+} satisfies Metadata
 
 export default async function SettingsPage({
     params: { id },

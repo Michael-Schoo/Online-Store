@@ -17,7 +17,7 @@ interface DashboardLayoutProps {
 const siteName = (rootMetadata!.title as { default: string })!.default
 
 // todo: add metadata that uses the listing name
-export const metadata: Metadata = {
+export const metadata = {
     title: {
         template: "%s | Listing Name | " + siteName,
         default: "Listing Name | " + siteName
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     robots: {
         index: false
     }
-}
+} satisfies Metadata
 
 export default async function DashboardLayout({
     children,

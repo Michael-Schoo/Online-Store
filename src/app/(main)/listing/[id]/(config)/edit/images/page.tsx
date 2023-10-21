@@ -10,11 +10,12 @@ import { extractRouterConfig } from "uploadthing/server"
 import { ourFileRouter } from "@/app/api/uploadthing/core"
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { getListing } from "../../utils"
+import { Metadata } from "next";
 
 export const metadata = {
     title: "Images",
     description: "Manage and create images for your listing.",
-}
+} satisfies Metadata
 
 export default async function ImagesPage({
     params: { id },

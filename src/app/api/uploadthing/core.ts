@@ -64,7 +64,8 @@ export const ourFileRouter = {
                 }),
 
             ])
-            
+
+            return
         }),
 } satisfies FileRouter
 

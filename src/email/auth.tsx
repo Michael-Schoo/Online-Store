@@ -4,7 +4,7 @@ import { Html } from "@react-email/html";
 
 const magicLoginStyles = `:root{color-scheme: light dark !important;supported-color-schemes: light dark !important;font-family: 'Inter', Helvetica, Arial, sans-serif}`
 
-export const MagicLogin = (magicLink: string, username: string, intention: "register" | "login") => {
+export const MagicLogin = (magicLink: string, name: string, intention: "register" | "login") => {
     return (
         <Tailwind
             config={{
@@ -51,7 +51,7 @@ export const MagicLogin = (magicLink: string, username: string, intention: "regi
                         <h1 className='mt-0 font-lg font-bold text-dark dark:text-white'>
                             {
                                 intention === "register" ? "Welcome to Online Store,"
-                                    : intention === "login" ? `Hey @${username} 👋,`
+                                    : intention === "login" ? `Hey ${name} 👋,`
                                         : "???"
                             }
                         </h1>

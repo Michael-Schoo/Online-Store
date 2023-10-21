@@ -14,7 +14,7 @@ function getDB() {
 }
 
 declare namespace global {
-    var db: ReturnType<typeof getDB> | undefined
+    let db: ReturnType<typeof getDB> | undefined
 }
 
 const db = global.db || getDB()

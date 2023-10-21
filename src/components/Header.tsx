@@ -2,6 +2,7 @@ import { getCurrentUser } from "@/lib/session"
 import { MainNav } from "./MainNav"
 import { Search } from "./Search"
 import { UserNav, SignedOutUserNav } from "./UserNav"
+import { generateAvatarUrl } from "@/lib/tools";
 
 export default async function Header() {
     const user = await getCurrentUser()
@@ -14,10 +15,12 @@ export default async function Header() {
                     <Search className="relative w-full max-w-[350px] lg:w-80 lg:max-w-[450px] xl:w-full" />
                 </div>
                 <div className="flex justify-end lg:w-1/3">
-                    {user?.email && user?.name ? (
+                    {user?.email ? (
                         <UserNav user={{
-                            username: user.name,
+                            name: user.name || 'New User',
                             email: user.email,
+                            id: user.id,
+                            image: user.image || generateAvatarUrl(user.email),
                         }}
                         />
                     ) : (

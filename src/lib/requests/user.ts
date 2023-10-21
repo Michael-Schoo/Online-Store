@@ -3,7 +3,7 @@ import useSWR from "swr"
 
 interface User {
     id: number
-    username: string
+    name: string
     admin: boolean
 }
 
@@ -13,8 +13,7 @@ interface LoggedInUser extends User {
 
 async function getUser(userId: string) {
     const res = await fetch(`/api/user/${userId}`)
-    const data = await res.json()
-    return data
+    return await res.json()
 }
 
 export function useUser(userId: string) {

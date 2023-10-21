@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import type { Listing } from "@prisma/client"
+import type { User } from "@prisma/client"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
@@ -20,16 +20,16 @@ import { toast } from "@/components/ui/use-toast"
 import { Loader2 } from "lucide-react"
 import { listingUpdateSchema } from "@/lib/validations/listing"
 import { useState } from "react"
-import { Textarea } from "@/components/ui/textarea"
+import { userUpdateSchema } from "@/lib/validations/user";
 
 
-interface InformationFormProps {
-    listing: Listing
+interface NameFormProps {
+    user: User
 }
 
-type FormData = z.infer<typeof listingUpdateSchema>
+type FormData = z.infer<typeof userUpdateSchema>
 
-export function InformationForm({ listing }: InformationFormProps) {
+export function NameForm({ user }: NameFormProps) {
     const router = useRouter()
     const {
         handleSubmit,
@@ -38,8 +38,7 @@ export function InformationForm({ listing }: InformationFormProps) {
     } = useForm<FormData>({
         resolver: zodResolver(listingUpdateSchema.partial()),
         defaultValues: {
-            name: listing?.name || "",
-            description: listing?.description || "",
+            name: user?.name || "",
         },
     })
     const [isSaving, setIsSaving] = useState<boolean>(false)
@@ -48,7 +47,7 @@ export function InformationForm({ listing }: InformationFormProps) {
 
         setIsSaving(true)
 
-        const response = await fetch(`/api/listing/${listing.id}`, {
+        const response = await fetch(`/api/user/${user.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -61,7 +60,7 @@ export function InformationForm({ listing }: InformationFormProps) {
         if (!response?.ok) {
             return toast({
                 title: "Something went wrong.",
-                description: "Your information was not updated. Please try again.",
+                description: "Your name was not updated. Please try again.",
                 variant: "destructive",
             })
         }
@@ -77,9 +76,9 @@ export function InformationForm({ listing }: InformationFormProps) {
         <form onSubmit={handleSubmit(onSubmit)}>
             <Card>
                 <CardHeader>
-                    <CardTitle>Basic Information</CardTitle>
+                    <CardTitle>Your Name</CardTitle>
                     <CardDescription>
-                        Please enter the name and description of your listing.
+                        Please enter your full name or a display name you are comfortable with.
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -90,26 +89,13 @@ export function InformationForm({ listing }: InformationFormProps) {
                         <Input
                             id="name"
                             className="w-full sm:w-[400px]"
-                            size={50}
-                            defaultValue={listing?.name || ""}
+                            size={32}
+                            autoComplete="false"
+                            defaultValue={user?.name || ""}
                             {...register("name")}
                         />
                         {errors?.name && (
                             <p className="px-1 text-xs text-red-600">{errors.name.message}</p>
-                        )}
-
-                        <Label className="sr-only" htmlFor="name">
-                            Description
-                        </Label>
-                        <Textarea
-                            id="description"
-                            placeholder="Enter the description..."
-                            className="w-full sm:w-[400px]"
-                            // size={32}
-                            {...register("description")}
-                        />
-                        {errors?.description && (
-                            <p className="px-1 text-xs text-red-600">{errors.description.message}</p>
                         )}
                     </div>
                 </CardContent>

@@ -5,11 +5,11 @@ export default function ListingPage() {
     return <CreateListing />
 }
 
-export const metadata: Metadata = {
+export const metadata = {
     title: "New Listing",
     description: "Create a new listing",
     robots: {
         index: false,
         follow: false,
     }
-}
+} satisfies Metadata

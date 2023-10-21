@@ -1,12 +1,5 @@
 import crypto from "crypto"
 
-export const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/
-// export const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/
-// export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
-export const passwordRegex = /^.{8,}$/
-
-export const tokenLife = 1000 * 60 * 60 * 24 * 7 // 7 days
-
 export const currencies = [
     { name: "USD", symbol: "$" },
     { name: "AUD", symbol: "A$" },

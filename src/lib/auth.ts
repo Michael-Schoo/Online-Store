@@ -10,9 +10,6 @@ import sendReactEmail from "@/email/send-email"
 
 
 export const authOptions: NextAuthOptions = {
-    // huh any! I know.
-    // This is a temporary fix for prisma client.
-    // @see https://github.com/prisma/prisma/issues/16117
     adapter: PrismaAdapter(prisma),
     session: {
         strategy: "jwt",
@@ -20,7 +17,6 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: "/login",
         newUser: "/register/onboarding",
-
     },
     providers: [
         GoogleProvider({
@@ -28,11 +24,9 @@ export const authOptions: NextAuthOptions = {
             clientSecret: env.GOOGLE_CLIENT_SECRET,
             profile(profile, tokens) {
 
-                // username is num/let/`-` only
-                const username = profile.name.replace(/[^a-zA-Z0-9-]/g, "")
                 return {
                     id: profile.sub,
-                    username,
+                    name: profile.name,
                     email: profile.email,
                     image: profile.picture,
                 }
@@ -42,25 +36,43 @@ export const authOptions: NextAuthOptions = {
         EmailProvider({
             from: env.SMTP_FROM,
             sendVerificationRequest: async ({ identifier, url, provider, expires, theme, token }) => {
+
                 const user = await prisma.user.findUnique({
                     where: {
                         email: identifier,
                     },
                     select: {
                         emailVerified: true,
-                        username: true,
+                        name: true,
                         email: true,
                     },
                 })
 
+                // // set default name based on email
+                // if (!user?.name) {
+                //     user = await prisma.user.update({
+                //         where: {
+                //             email: identifier,
+                //         },
+                //         data: {
+                //             name: identifier.split("@")[0],
+                //         },
+                //         select: {
+                //             emailVerified: true,
+                //             name: true,
+                //             email: true,
+                //         },
+                //     })
+                // }
+
                 const intention = user?.emailVerified ? 'login' : 'register'
-                const emailToSend = MagicLogin(url, user?.username || 'New User', intention)
+                const emailToSend = MagicLogin(url, user?.name || 'New User', intention)
                 await sendReactEmail(
                     emailToSend,
                     intention === 'register' ? "Activate your account" : "Sign-in link for Online Store" ,
                     {
                         email: user?.email || identifier,
-                        name: user?.username || 'New User'
+                        name: user?.name || 'New User'
                     },
                     false
                 )
@@ -73,7 +85,7 @@ export const authOptions: NextAuthOptions = {
                 session.user.id = token.id
                 session.user.name = token.name
                 session.user.email = token.email
-                // session.user.image = token.picture
+                session.user.image = token.image
             }
 
             return session
@@ -94,9 +106,9 @@ export const authOptions: NextAuthOptions = {
 
             return {
                 id: dbUser.id,
-                name: dbUser.username,
+                name: dbUser.name,
                 email: dbUser.email,
-                // picture: dbUser.image,
+                image: dbUser.image,
             }
         },
     },

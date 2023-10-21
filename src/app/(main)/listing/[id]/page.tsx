@@ -55,7 +55,7 @@ export default async function ListingPage({
             //         createdAt: true,
             //         user: {
             //             select: {
-            //                 username: true,
+            //                 name: true,
             //                 id: true,
             //             },
             //         },
@@ -68,7 +68,7 @@ export default async function ListingPage({
             },
             user: {
                 select: {
-                    username: true,
+                    name: true,
                     id: true,
                 },
             },
@@ -87,7 +87,7 @@ export default async function ListingPage({
     if (!listing.published && !isCreator) {
         return "DRAFT... check later :)"
         // return notFound()
-    };
+    }
 
     if (listing.published) {
         // add to analytics
@@ -113,7 +113,7 @@ export default async function ListingPage({
             <p>{listing.publishedAt?.toISOString()}</p>
             <p>{listing.published ? "Published" : "Draft"}</p>
             <p>
-                @{listing.user.username}
+                @{listing.user.name}
                 {isCreator && " (You!)"}
             </p>
             <div>

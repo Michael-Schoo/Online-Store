@@ -92,6 +92,7 @@ export function PriceForm({ listing }: PriceFormProps) {
                             min={0}
                             max={10_000}
                             size={50}
+                            defaultValue={listing?.price ?? undefined}
                             {...register("price", { valueAsNumber: true })}
                         />
                         {errors?.price && (

@@ -48,12 +48,11 @@ export default async function LoginPage() {
     )
 }
 
-export const metadata: Metadata = {
+export const metadata = {
     title: "Login",
     description: "Login to your account",
     robots: {
         index: false,
         follow: false,
     }
-
-}
+} satisfies Metadata
