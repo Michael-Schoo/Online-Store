@@ -70,8 +70,8 @@ export function UserNav({ user }: UserProps) {
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link href="/purchases" className="cursor-pointer">
-                            Purchases
+                        <Link href="/dashboard" className="cursor-pointer">
+                            Dashboard
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>

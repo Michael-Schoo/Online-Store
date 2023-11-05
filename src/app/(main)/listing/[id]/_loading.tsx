@@ -1,6 +1,6 @@
 
 
-export default function Loading() {
+export default function _loading() {
     return (
         "loading..."
     )

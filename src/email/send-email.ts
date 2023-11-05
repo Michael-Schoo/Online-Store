@@ -6,8 +6,6 @@ export default async function sendReactEmail(jsx: ReactElement, subject: string,
     const html = render(jsx);
     const text = render(jsx, { plainText: true }); 
 
-    
-
     await fetch(env.EMAIL_API_URL, {
         method: "POST",
         headers: {

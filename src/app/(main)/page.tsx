@@ -23,7 +23,7 @@ export default async function Home() {
             <div>
                 {items.map((item) => (
                     <div className="mb-3" key={item.id}>
-                        <Link href={'/listing/' + item.id} >
+                        <Link href={'/listing/' + item.id}>
                             <h2>
                                 <b>Name:</b> {item.name}
                             </h2>

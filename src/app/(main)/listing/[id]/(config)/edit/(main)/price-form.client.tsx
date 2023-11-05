@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import type { Listing } from "@prisma/client"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
@@ -20,10 +19,11 @@ import { toast } from "@/components/ui/use-toast"
 import { Loader2 } from "lucide-react"
 import { listingUpdateSchema } from "@/lib/validations/listing"
 import { useState } from "react"
+import { getListing } from "../../utils";
 
 
 interface PriceFormProps {
-    listing: Listing
+    listing: NonNullable<Awaited<ReturnType<typeof getListing>>>
 }
 
 type FormData = z.infer<typeof listingUpdateSchema>

@@ -1,7 +1,7 @@
 import {notFound, redirect} from "next/navigation"
 import { getCurrentUser } from "@/lib/session"
 import { DashboardNav, SidebarNavItem } from "@/components/Nav"
-import { Settings, ShoppingCart, UserIcon} from "lucide-react"
+import {FileTextIcon, Settings, ShoppingCart, UserIcon} from "lucide-react"
 import { getUser } from "@/app/(main)/(settings)/utils";
 import { authOptions } from "@/lib/auth";
 
@@ -26,6 +26,11 @@ export default async function DashboardLayout({
             title: "Your Profile",
             href: `/user/${fetchedUser.id}`,
             icon: <UserIcon />,
+        },
+        {
+            title: "Dashboard",
+            href: `/dashboard`,
+            icon: <FileTextIcon />,
         },
         {
             title: "Purchase History",

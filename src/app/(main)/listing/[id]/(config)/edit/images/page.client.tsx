@@ -21,7 +21,6 @@ export default function UploadImages({ images, listingId }: { images: { alt: str
 
     const router = useRouter()
 
-
     return (
         <Card>
             <CardHeader>

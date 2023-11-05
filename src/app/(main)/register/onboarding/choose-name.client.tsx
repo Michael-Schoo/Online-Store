@@ -4,14 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { toast } from '@/components/ui/use-toast';
-import { listingCreateSchema } from '@/lib/validations/listing';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
-import {userUpdateSchema} from "@/lib/validations/user";
+import { userUpdateSchema } from "@/lib/validations/user";
 
 type FormData = z.infer<typeof userUpdateSchema>
 
@@ -28,7 +27,7 @@ export default function ChooseNameClient({name, id}: ChooseNameFormProps) {
         register,
         formState: { errors },
     } = useForm<FormData>({
-        resolver: zodResolver(listingCreateSchema),
+        resolver: zodResolver(userUpdateSchema),
         defaultValues: {
             name: name,
         }

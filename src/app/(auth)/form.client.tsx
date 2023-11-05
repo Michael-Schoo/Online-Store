@@ -30,9 +30,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     })
     const [isLoading, setIsLoading] = React.useState<boolean>(false)
     const [isGoogleLoading, setIsGoogleLoading] = React.useState<boolean>(false)
-    const searchParams = useSearchParams()
-    const callbackUrl = searchParams?.get("from") || "/"
-
+    const getCallbackUrl = () => new URL(window.location.href).searchParams?.get("from") || "/"
 
     async function onSubmit(data: FormData) {
         setIsLoading(true)
@@ -40,7 +38,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         const signInResult = await signIn("email", {
             email: data.email,
             redirect: false,
-            callbackUrl
+            callbackUrl: getCallbackUrl()
         })
 
         setIsLoading(false)
@@ -109,7 +107,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 variant="outline"
                 onClick={() => {
                     setIsGoogleLoading(true)
-                    signIn("google", { callbackUrl })
+                    signIn("google", { callbackUrl: getCallbackUrl() })
                 }}
                 disabled={isLoading || isGoogleLoading}
             >

@@ -36,7 +36,7 @@ export function PublishModal({ listing, name, disabled }: { listing: string, nam
             })
         }
 
-        router.push(`/listing/${listing}`)
+        router.push(`/listing/${listing}`, {})
 
         toast({
             title: "Published listing.",

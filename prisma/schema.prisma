@@ -48,23 +48,25 @@ model Session {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  email         String          @unique @db.VarChar(255)
-  name          String?         @db.VarChar(25)
-  admin         Boolean         @default(false)
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  listings      Listing[]
-  purchaces     Purchace[]
-  walets        Walet[]
+  id                 String               @id @default(cuid())
+  email              String               @unique @db.VarChar(255)
+  name               String?              @db.VarChar(25)
+  admin              Boolean              @default(false)
+  emailVerified      DateTime?
+  image              String?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  listings           Listing[]
+  purchaces          Purchace[]
+  walets             Walet[]
   // listingReviews ListingReview[]
-  notifications Notification[]
-  listingImages ListingImage[]
-  accounts      Account[]
-  sessions      Session[]
-  savedListings SavedListings[]
+  notifications      Notification[]
+  listingImages      ListingImage[]
+  accounts           Account[]
+  sessions           Session[]
+  savedListings      SavedListings[]
+  ListingChat        ListingChat[]
+  ListingChatMessage ListingChatMessage[]
 
   @@index([email])
   @@map(name: "users")
@@ -90,28 +92,30 @@ model Walet {
 }
 
 model Listing {
-  id            String             @id @default(cuid())
-  name          String             @db.TinyText
-  description   String?            @db.Text
-  price         Float?
+  id                 String               @id @default(cuid())
+  name               String               @db.TinyText
+  description        String?              @db.Text
+  price              Float?
   // currency      String?         @default("USD") @db.Char(3)
   // stock         Int?            @default(1) @db.UnsignedTinyInt
-  archived      Boolean            @default(false)
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
-  publishedAt   DateTime?
-  published     Boolean            @default(false)
+  archived           Boolean              @default(false)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  publishedAt        DateTime?
+  published          Boolean              @default(false)
   // if there is a purchace or bid, it is locked for edits
-  locked        Boolean            @default(false)
-  userId        String
-  averageRating Float?
-  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tags          Tag[]
-  purchaces     Purchace[]
+  locked             Boolean              @default(false)
+  userId             String
+  averageRating      Float?
+  user               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags               Tag[]
+  purchaces          Purchace[]
   // reviews       ListingReview[]
-  images        ListingImage[]
-  usersSaved    SavedListings[]
-  analytics     ListingAnalytics[]
+  images             ListingImage[]
+  usersSaved         SavedListings[]
+  analytics          ListingAnalytics[]
+  listingChats       ListingChat[]
+  ListingChatMessage ListingChatMessage[]
 
   @@index([userId])
   @@index([published, archived])
@@ -147,6 +151,44 @@ model ListingImage {
 //   @@index([userId])
 //   @@map("listing_reviews")
 // }
+
+model ListingChat {
+  listingId String
+  buyerId   String
+  listing   Listing              @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyer     User                 @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  archived  Boolean              @default(false)
+  messages  ListingChatMessage[]
+
+  @@id([listingId, buyerId])
+  @@index([listingId])
+  @@index([buyerId])
+  @@map("listing_chat")
+}
+
+model ListingChatMessage {
+  listingId String
+  buyerId   String
+  listing   Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  id                   String          @id @default(cuid())
+  userId               String
+  user                 User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message              String          @db.Text()
+  type                 ChatMessageType @default(MESSAGE)
+  createdAt            DateTime        @default(dbgenerated("now()")) @db.Timestamp()
+  listingChat          ListingChat?    @relation(fields: [listingChatListingId, listingChatBuyerId], references: [listingId, buyerId])
+  listingChatListingId String?
+  listingChatBuyerId   String?
+
+  @@index([listingId, buyerId])
+  @@map("listing_chat_message")
+}
+
+enum ChatMessageType {
+  MESSAGE
+  COUNTER_OFFER
+}
 
 model SavedListings {
   id        String   @id @default(cuid())

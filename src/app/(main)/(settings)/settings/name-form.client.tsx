@@ -21,10 +21,11 @@ import { Loader2 } from "lucide-react"
 import { listingUpdateSchema } from "@/lib/validations/listing"
 import { useState } from "react"
 import { userUpdateSchema } from "@/lib/validations/user";
+import type { getUser } from "../utils";
 
 
 interface NameFormProps {
-    user: User
+    user: NonNullable<Awaited<ReturnType<typeof getUser>>>
 }
 
 type FormData = z.infer<typeof userUpdateSchema>

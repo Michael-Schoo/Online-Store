@@ -21,10 +21,11 @@ import { Loader2 } from "lucide-react"
 import { listingUpdateSchema } from "@/lib/validations/listing"
 import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
+import {getListing} from "@/app/(main)/listing/[id]/(config)/utils";
 
 
 interface InformationFormProps {
-    listing: Listing
+    listing: NonNullable<Awaited<ReturnType<typeof getListing>>>
 }
 
 type FormData = z.infer<typeof listingUpdateSchema>
@@ -38,8 +39,8 @@ export function InformationForm({ listing }: InformationFormProps) {
     } = useForm<FormData>({
         resolver: zodResolver(listingUpdateSchema.partial()),
         defaultValues: {
-            name: listing?.name || "",
-            description: listing?.description || "",
+            name: listing.name || "",
+            description: listing.description || "",
         },
     })
     const [isSaving, setIsSaving] = useState<boolean>(false)
