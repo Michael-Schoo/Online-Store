@@ -1,9 +1,7 @@
 import { notFound } from "next/navigation"
-
 import { getCurrentUser } from "@/lib/session"
 import { DashboardNav, SidebarNavItem } from "@/components/Nav"
 import { BarChart2Icon, CheckCheckIcon, FileImage, Settings } from "lucide-react"
-import prisma from "@/lib/prisma"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Metadata } from "next"
 import { metadata as rootMetadata } from "@/app/layout"
@@ -16,16 +14,21 @@ interface DashboardLayoutProps {
 
 const siteName = (rootMetadata!.title as { default: string })!.default
 
-// todo: add metadata that uses the listing name
-export const metadata = {
-    title: {
-        template: "%s | Listing Name | " + siteName,
-        default: "Listing Name | " + siteName
-    },
-    robots: {
-        index: false
-    }
-} satisfies Metadata
+export async function generateMetadata({params}: {params: {id: string}}) {
+    const user = await getCurrentUser()
+    const listing = await getListing(params.id, user?.id ?? '')
+    if (!listing) return notFound()
+
+    return {
+        title: {
+            template: `%s | ${listing.name} | ` + siteName,
+            default: `${listing.name} | ` + siteName
+        },
+        robots: {
+            index: false
+        }
+    } satisfies Metadata
+}
 
 export default async function DashboardLayout({
     children,

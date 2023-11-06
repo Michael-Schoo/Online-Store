@@ -21,7 +21,7 @@ import { Loader2 } from "lucide-react"
 import { listingUpdateSchema } from "@/lib/validations/listing"
 import { useState } from "react"
 import { Textarea } from "@/components/ui/textarea"
-import {getListing} from "@/app/(main)/listing/[id]/(config)/utils";
+import { getListing } from "@/app/(main)/listing/[id]/(config)/utils";
 
 
 interface InformationFormProps {
@@ -106,7 +106,7 @@ export function InformationForm({ listing }: InformationFormProps) {
                             id="description"
                             placeholder="Enter the description..."
                             className="w-full sm:w-[400px]"
-                            // size={32}
+                            defaultValue={listing?.description || ""}
                             {...register("description")}
                         />
                         {errors?.description && (

@@ -67,7 +67,6 @@ export default async function SettingsPage({
                 text={metadata.description}
             />
             <div className="grid gap-10">
-                {/* something */}
                 <AnalyticsGraph chartData={chartdata} />
             </div>
         </DashboardShell>

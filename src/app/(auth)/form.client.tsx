@@ -73,7 +73,6 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                             autoComplete="email"
                             autoCorrect="off"
                             disabled={isLoading}
-                            // required
                             {...register("email")}
                         />
                         {errors?.email && (

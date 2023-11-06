@@ -6,7 +6,6 @@ import { NextResponse } from "next/server"
 export async function POST(request: Request) {
     const res = await request.json()
 
-    // todo: validate is user ID actually exists (only when if you can delete account) 
     const user = await getCurrentUser()
     if (!user) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 })

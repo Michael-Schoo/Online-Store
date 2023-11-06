@@ -42,7 +42,6 @@ export default function AnalyticsGraph({ chartData }: { chartData: LineChartProp
                     This is how many views your listing has had in each day (days set to utc).
                 </CardDescription>
             </CardHeader>
-            {/* <Title>Export/Import Growth Rates (1970 to 2021)</Title> */}
             <CardContent>
                 <Select defaultValue={monthYearNames.at(-1)} onValueChange={setMonthChosen}>
                     <SelectTrigger className="w-[180px]">
@@ -64,13 +63,10 @@ export default function AnalyticsGraph({ chartData }: { chartData: LineChartProp
 
                 <AreaChart
                     className="mt-6"
-                    // data={chartData}
                     data={monthData}
                     index="day"
                     categories={["Page Visits"]}
-                    // colors={["blue"]}
                     valueFormatter={dataFormatter}
-                    // yAxisWidth={40}
                     showAnimation={true}
                 />
             </CardContent>

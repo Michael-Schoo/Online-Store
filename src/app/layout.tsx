@@ -29,8 +29,6 @@ export default function RootLayout({
                 "min-h-screen bg-background antialiased",
                 fontSans.className,
             )}>
-                {/* <Header />
-                <main>{children}</main> */}
                 {children}
                 <Toaster />
             </body>

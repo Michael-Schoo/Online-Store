@@ -10,8 +10,6 @@ export async function GET(
     request: Request,
     { params: { id } }: { params: { id: string } },
 ) {
-    // const params = new URL(request.url).searchParams
-
     // const id = params.params.id;
     if (id === "@me") {
 

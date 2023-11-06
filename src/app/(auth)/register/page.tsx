@@ -45,6 +45,7 @@ export default async function RegisterPage() {
                             Enter your email below to create your account
                         </p>
                     </div>
+
                     {/* the actual sign up part */}
                     <UserAuthForm />
 

@@ -1,6 +1,6 @@
 import * as z from "zod"
 import { currencies } from "../tools"
-import {ChatMessageType} from "@prisma/client";
+import { ChatMessageType } from "@prisma/client";
 
 export const listingCreateSchema = z.object({
     name: z.string().min(5).max(50),

@@ -1,14 +1,13 @@
-import { notFound, redirect } from "next/navigation"
+import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth"
 import { getCurrentUser } from "@/lib/session"
 import { Metadata } from "next";
-import {getListing} from "@/app/(main)/listing/[id]/(config)/utils";
-import {prisma} from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import {cn} from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 export const metadata = {
-    title: "Chat | listing name | online store",
+    title: "Your chats",
     description: "Chat to the listing owner",
 } satisfies Metadata
 
@@ -34,19 +33,19 @@ export default async function ChatPage() {
             ],
         },
         select: {
-           listingId: true,
-           listing: {
-               select: {
-                   name: true
-               }
-           },
-           buyerId: true,
-           buyer: {
-               select: {
-                   name: true
-               }
-           },
-           archived: true
+            listingId: true,
+            listing: {
+                select: {
+                    name: true
+                }
+            },
+            buyerId: true,
+            buyer: {
+                select: {
+                    name: true
+                }
+            },
+            archived: true
         }
     })
 
@@ -55,7 +54,7 @@ export default async function ChatPage() {
             <Link
                 key={`${chat.listingId}-${chat.buyerId}`}
                 href={`/listing/${chat.listingId}/chat/${chat.buyerId}`}
-                className={cn(chat.archived && 'text-gray-500')}
+                className={cn('hover:underline', chat.archived && 'text-gray-500')}
             >
                 &quot;{chat.listing.name}&quot; and &quot;{chat.buyer.name}&quot;
                 <br />

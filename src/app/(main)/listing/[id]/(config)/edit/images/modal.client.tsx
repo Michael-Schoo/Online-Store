@@ -155,7 +155,7 @@ export function DeleteModal({ image, listing, name }: { image: string, listing: 
         <Dialog>
             <DialogTrigger asChild>
                 <Button variant="destructive" size="icon-sm">
-                    <Trash2Icon className="w-4"/>
+                    <Trash2Icon className="w-4" />
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">

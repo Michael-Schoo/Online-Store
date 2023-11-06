@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
                 const emailToSend = MagicLogin(url, user?.name || 'New User', intention)
                 await sendReactEmail(
                     emailToSend,
-                    intention === 'register' ? "Activate your account" : "Sign-in link for Online Store" ,
+                    intention === 'register' ? "Activate your account" : "Sign-in link for Online Store",
                     {
                         email: user?.email || identifier,
                         name: user?.name || 'New User'

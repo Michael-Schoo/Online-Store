@@ -2,20 +2,35 @@ import { notFound, redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth"
 import { getCurrentUser } from "@/lib/session"
 import { Metadata } from "next";
-import {prisma} from "@/lib/prisma";
-import {ChatList} from "@/components/ChatList";
-import {EmptyScreen} from "@/components/EmptyChatScreen";
-import {ChatForm} from "@/components/ChatForm";
-import {generateAvatarUrl} from "@/lib/tools";
-import {ChatMessageType} from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { ChatList } from "@/components/ChatList";
+import { EmptyScreen } from "@/components/EmptyChatScreen";
+import { ChatForm } from "@/components/ChatForm";
+import { generateAvatarUrl } from "@/lib/tools";
+import { ChatMessageType } from "@prisma/client";
+import { getListing } from "../../(config)/utils"
+import { metadata as rootMetadata } from "@/app/layout"
 
-export const metadata = {
-    title: "Chat | listing name | online store",
-    description: "Chat to the listing owner",
-} satisfies Metadata
+const siteName = (rootMetadata!.title as { default: string })!.default
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+    const user = await getCurrentUser()
+    const listing = await getListing(params.id, user?.id ?? '')
+    if (!listing) return notFound()
+
+    return {
+        title: {
+            template: `%s | ${listing.name} | ` + siteName,
+            default: `Chat for "${listing.name}" | ` + siteName
+        },
+        robots: {
+            index: false
+        }
+    } satisfies Metadata
+}
 
 export default async function ChatPage({
-   params: {id, userId}
+    params: { id, userId }
 }: {
     params: { id: string, userId: string }
 }) {
@@ -24,7 +39,6 @@ export default async function ChatPage({
         redirect(authOptions?.pages?.signIn || "/login")
     }
 
-    console.log({id, userId})
 
     const listing = await prisma.listing.findUnique({
         where: {
@@ -78,7 +92,7 @@ export default async function ChatPage({
         }
     })
 
-    const messagesFormatted = messages.map(m=> {
+    const messagesFormatted = messages.map(m => {
         return {
             message: m.message,
             type: m.type,
@@ -91,10 +105,13 @@ export default async function ChatPage({
             createdAt: m.createdAt
         } satisfies ChatList['messages'][0]
     })
-    messagesFormatted[2] = {
-        ...messagesFormatted[2],
-        type: ChatMessageType.COUNTER_OFFER
-    }
+
+    // to test counter offer
+    // messagesFormatted[2] = {
+    //     ...messagesFormatted[2],
+    //     type: ChatMessageType.COUNTER_OFFER
+    // }
+
     return (
         <>
             <div className='pb-[200px] pt-4 md:pt-10'>
@@ -104,11 +121,11 @@ export default async function ChatPage({
                     </>
                 ) : (
                     // <EmptyScreen setInput={setInput} />
-                    <EmptyScreen  />
+                    <EmptyScreen />
                 )}
             </div>
 
-            <ChatForm id={{listingId: listingChat.listingId, userId: listingChat.buyerId}} currentPrice={listing.price!} />
+            <ChatForm id={{ listingId: listingChat.listingId, userId: listingChat.buyerId }} currentPrice={listing.price!} />
 
         </>
     )

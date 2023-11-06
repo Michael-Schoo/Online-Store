@@ -35,6 +35,7 @@ export default async function DashboardLayout({
         {
             title: "Purchase History",
             href: `/purchases`,
+            disabled: true,
             icon: <ShoppingCart  />,
         },
         {
@@ -58,6 +59,5 @@ export default async function DashboardLayout({
                 {children}
             </main>
         </div>
-        // <SiteFooter className="border-t" />
     )
 }

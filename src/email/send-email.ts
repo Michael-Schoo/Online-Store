@@ -4,7 +4,7 @@ import { env } from "@/env";
 
 export default async function sendReactEmail(jsx: ReactElement, subject: string, recipient: { email: string, name: string }, thread = true) {
     const html = render(jsx);
-    const text = render(jsx, { plainText: true }); 
+    const text = render(jsx, { plainText: true });
 
     await fetch(env.EMAIL_API_URL, {
         method: "POST",

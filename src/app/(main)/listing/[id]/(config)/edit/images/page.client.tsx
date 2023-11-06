@@ -17,7 +17,7 @@ import { DeleteModal, EditInfoModal } from "./modal.client"
 // max 10 images
 // store list of ids in listing data
 
-export default function UploadImages({ images, listingId }: { images: { alt: string | null, id: string, url: string}[], listingId: string }) {
+export default function UploadImages({ images, listingId }: { images: { alt: string | null, id: string, url: string }[], listingId: string }) {
 
     const router = useRouter()
 
@@ -42,7 +42,6 @@ export default function UploadImages({ images, listingId }: { images: { alt: str
                         <UploadDropzone
                             endpoint="listingImages"
 
-                            // key={listingId}
                             onClientUploadComplete={(res) => {
                                 // Do something with the response
                                 console.log("Files: ", res)
@@ -71,7 +70,7 @@ export default function UploadImages({ images, listingId }: { images: { alt: str
                                 console.log(error)
 
                                 // todo: show better user error
-                                // - most common is too many uploaded
+                                // - most common is too many images uploaded
 
                                 toast({
                                     title: "Something went wrong.",
@@ -86,10 +85,7 @@ export default function UploadImages({ images, listingId }: { images: { alt: str
                             className="cursor-pointer"
                             appearance={{
                                 container: "border-dashed border-4 rounded-xl border-border w-full mt-0 h-full",
-                                // button: buttonVariants({ variant: "default" }),
-                                // label: "text-primary hover:text-primary/75",
                                 label: "w-auto",
-                                // allowedContent: "text-muted-foreground"
                             }}
 
                             config={{

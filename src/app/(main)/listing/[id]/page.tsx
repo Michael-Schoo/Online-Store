@@ -5,7 +5,7 @@ import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import {cn} from "@/lib/utils";
 
-
+/** Very useful function to record time */
 function addToAnalytics(listingId: string, day: Date | string) {
     return prisma.listingAnalytics.upsert({
         where: {
@@ -46,24 +46,9 @@ export default async function ListingPage({
             name: true,
             description: true,
             price: true,
-            // currency: true,
             publishedAt: true,
             published: true,
             averageRating: true,
-            // reviews: {
-            //     select: {
-            //         id: true,
-            //         rating: true,
-            //         comment: true,
-            //         createdAt: true,
-            //         user: {
-            //             select: {
-            //                 name: true,
-            //                 id: true,
-            //             },
-            //         },
-            //     },
-            // },
             tags: {
                 select: {
                     name: true,
@@ -88,7 +73,6 @@ export default async function ListingPage({
     const currentUser = await getCurrentUser()
     const isCreator = currentUser?.id === listing.user.id
     if (!listing.published && !isCreator) {
-        return "DRAFT... check later :)"
         // return notFound()
     }
 
@@ -192,8 +176,6 @@ export default async function ListingPage({
                         </Button>
                     ) }
                     </div>
-
-
 
                 </div>
             </div>

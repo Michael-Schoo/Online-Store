@@ -8,9 +8,7 @@ export default function RootLayout({
     return (
         <>
             <Header />
-            {/* <div className="container grid flex-1 gap-12 md:grid-cols-[200px_1fr]"> */}
-                {children}
-            {/* </div> */}
+            {children}
         </>
     )
 }

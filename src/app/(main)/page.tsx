@@ -28,7 +28,7 @@ export default async function Home() {
                                 <b>Name:</b> {item.name}
                             </h2>
                             <p>
-                                <b>description:</b> {item.description}
+                                <b>Description:</b> {item.description}
                             </p>
                             <p>${item.price}</p>
                         </Link>

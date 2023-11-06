@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import {ArrowRightIcon} from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 
 const exampleMessages = [
     {
@@ -11,7 +11,7 @@ const exampleMessages = [
 ]
 
 // TODO actually use the input
-export function EmptyScreen({ setInput = (_: string) => {} }) {
+export function EmptyScreen({ setInput = (_: string) => { } }) {
     return (
         <div className="mx-auto max-w-2xl px-4">
             <div className="rounded-lg border bg-background p-8">

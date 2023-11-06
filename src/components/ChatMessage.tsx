@@ -3,10 +3,10 @@
 
 import { cn } from '@/lib/utils'
 import { ChatMessageActions } from '@/components/ChatMessageOptions'
-import {UserIcon} from "lucide-react";
-import {ChatList} from "@/components/ChatList";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {ChatMessageType} from "@prisma/client";
+import { UserIcon } from "lucide-react";
+import { ChatList } from "@/components/ChatList";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ChatMessageType } from "@prisma/client";
 
 export interface ChatMessageProps {
     message: ChatList['messages'][0],
@@ -53,7 +53,6 @@ export function ChatMessage({ message, currentPrice, ...props }: ChatMessageProp
                         )
                     }
                 </div>
-                {/*<ChatMessageActions message={message} />*/}
             </div>
         </div>
     )

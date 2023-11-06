@@ -3,8 +3,8 @@
 import { Button } from '@/components/ui/button'
 import { useCopyToClipboard } from '@/components/hooks/use-copy-to-clipboard'
 import { cn } from '@/lib/utils'
-import {CheckIcon, CopyIcon} from "lucide-react";
-import {ChatList} from "@/components/ChatList";
+import { CheckIcon, CopyIcon } from "lucide-react";
+import { ChatList } from "@/components/ChatList";
 
 interface ChatMessageActionsProps {
     message: ChatList['messages'][0],
@@ -12,9 +12,9 @@ interface ChatMessageActionsProps {
 }
 
 export function ChatMessageActions({
-                                       message,
-                                       className,
-                                   }: ChatMessageActionsProps) {
+    message,
+    className,
+}: ChatMessageActionsProps) {
     const { isCopied, copyToClipboard } = useCopyToClipboard({ timeout: 2000 })
 
     const onCopy = () => {
