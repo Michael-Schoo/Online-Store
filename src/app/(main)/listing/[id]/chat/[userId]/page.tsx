@@ -7,26 +7,22 @@ import { ChatList } from "@/components/ChatList";
 import { EmptyScreen } from "@/components/EmptyChatScreen";
 import { ChatForm } from "@/components/ChatForm";
 import { generateAvatarUrl } from "@/lib/tools";
-import { ChatMessageType } from "@prisma/client";
-import { getListing } from "../../(config)/utils"
-import { metadata as rootMetadata } from "@/app/layout"
 
-const siteName = (rootMetadata!.title as { default: string })!.default
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
     const user = await getCurrentUser()
     const listing = await prisma.listing.findUnique({
         where: {
             id: params.id
+        }, 
+        select: {
+            name: true
         }
     })
     if (!listing) return notFound()
 
     return {
-        title: {
-            template: `%s | ${listing.name} | ` + siteName,
-            default: `Chat for "${listing.name}" | ` + siteName
-        },
+        title: `Chat for "${listing.name}"`,
         robots: {
             index: false
         }
