@@ -15,7 +15,11 @@ const siteName = (rootMetadata!.title as { default: string })!.default
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
     const user = await getCurrentUser()
-    const listing = await getListing(params.id, user?.id ?? '')
+    const listing = await prisma.listing.findUnique({
+        where: {
+            id: params.id
+        }
+    })
     if (!listing) return notFound()
 
     return {
